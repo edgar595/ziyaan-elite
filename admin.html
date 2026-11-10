@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Ziyaan Elite — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#050505; --ink:#f8ecd2; --soft:#b9a878; --gold:#eab647; --line:#2a251c; --card:#0e0d0b; --panel:#0a0908; --red:#e0645a; --green:#3fbf6b;}
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Jost',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; -webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Cormorant Garamond',serif; font-weight:500;}
+  a{color:var(--gold);}
+  button,input,select,textarea{font:inherit; color:inherit;}
+  .hidden{display:none !important;}
+  .btn{background:var(--gold); color:#171410; border:none; padding:11px 18px; font-size:13px; font-weight:500; letter-spacing:.06em; cursor:pointer; white-space:nowrap;}
+  .btn:hover{background:#e3c07e;}
+  .btn:disabled{opacity:.5; cursor:wait;}
+  .btn.ghost{background:transparent; color:var(--ink); border:1px solid var(--line);}
+  .btn.ghost:hover{border-color:var(--gold); color:var(--gold);}
+  .btn.danger{background:transparent; color:var(--red); border:1px solid #4a2522;}
+  .btn.danger:hover,.btn.danger.confirm{background:var(--red); color:#fff; border-color:var(--red);}
+  .btn.sm{padding:7px 12px; font-size:12px;}
+
+  /* login */
+  .center{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+  .box{width:min(420px,100%); background:var(--card); border:1px solid var(--line); padding:34px 30px;}
+  .box img{height:72px; display:block; margin:0 auto 14px;}
+  .box h1{text-align:center; font-size:28px; margin-bottom:4px;}
+  .box p.sub{text-align:center; color:var(--soft); font-size:13.5px; margin-bottom:22px;}
+  label{display:block; font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:14px 0 6px;}
+  input[type=text],input[type=email],input[type=password],input[type=number],select,textarea{width:100%; background:var(--bg); border:1px solid var(--line); padding:11px 12px; font-size:14px; border-radius:0;}
+  textarea{resize:vertical; min-height:120px; line-height:1.55;}
+  input:focus,select:focus,textarea:focus{outline:none; border-color:var(--gold);}
+  .hint{font-size:12px; color:var(--soft); margin-top:5px; line-height:1.45;}
+  .err{background:#2a1513; border:1px solid #5a2a25; color:#f3b3ab; padding:10px 12px; font-size:13px; margin-top:14px; line-height:1.5;}
+  .box .btn{width:100%; margin-top:20px; padding:13px;}
+  code{background:#1a1712; padding:1px 5px; font-size:12.5px;}
+  pre{background:#14120e; border:1px solid var(--line); padding:10px; font-size:12px; white-space:pre-wrap; margin-top:8px; color:var(--ink);}
+
+  /* app */
+  header.top{position:sticky; top:0; z-index:20; background:rgba(5,5,5,.94); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  header.top .in{max-width:1240px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; gap:16px;}
+  header.top img{height:48px;}
+  header.top .t{font-family:'Cormorant Garamond',serif; font-size:22px;}
+  header.top .who{margin-left:auto; font-size:12.5px; color:var(--soft);}
+  main{max-width:1240px; margin:0 auto; padding:26px 24px 80px;}
+  .bar{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:20px;}
+  .bar h2{font-size:30px; margin-right:auto;}
+  .bar input,.bar select{width:auto; min-width:180px; padding:9px 12px;}
+  .stats{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;}
+  .stat{border:1px solid var(--line); background:var(--card); padding:10px 16px; font-size:12.5px; color:var(--soft);}
+  .stat b{display:block; font-size:20px; color:var(--ink); font-weight:500;}
+  .list{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px;}
+  .item{background:var(--card); border:1px solid var(--line); display:flex; flex-direction:column;}
+  .item.off{opacity:.55;}
+  .item .ph{aspect-ratio:1/1; background:var(--panel); overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; color:var(--soft); font-size:12px;}
+  .item .ph img{width:100%; height:100%; object-fit:cover;}
+  .badges{position:absolute; top:8px; left:8px; display:flex; flex-wrap:wrap; gap:5px;}
+  .badge{font-size:10px; letter-spacing:.06em; padding:3px 7px; background:var(--gold); color:#171410; font-weight:600;}
+  .badge.o{background:#000; color:var(--gold); border:1px solid var(--gold);}
+  .badge.h{background:#444; color:#fff;}
+  .item .meta{padding:12px 14px 6px;}
+  .item .b{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold);}
+  .item .n{font-size:15px; margin:3px 0 4px;}
+  .item .p{font-size:14px; color:var(--soft);}
+  .item .acts{display:flex; gap:6px; padding:10px 14px 14px; margin-top:auto; flex-wrap:wrap;}
+  .item .acts .btn{flex:1;}
+  .empty{grid-column:1/-1; text-align:center; color:var(--soft); padding:50px 0;}
+
+  /* stock */
+  .alerts{border:1px solid #5a4417; background:#1b150a; padding:14px 16px; margin-bottom:18px; display:flex; gap:14px; align-items:flex-start;}
+  .alerts.bad{border-color:#5a2a25; background:#1d0f0d;}
+  .alerts .ic{font-size:22px; line-height:1;}
+  .alerts b{display:block; font-size:15px; margin-bottom:4px;}
+  .alerts .names{font-size:13px; color:var(--soft); line-height:1.6;}
+  .alerts .names a{color:var(--ink); cursor:pointer; text-decoration:underline; text-decoration-color:#5a4a2a;}
+  .alerts .btn{margin-left:auto;}
+  .stat.warn b{color:#f0a35a;} .stat.bad b{color:var(--red);}
+  .stat.click{cursor:pointer;} .stat.click:hover{border-color:var(--gold);}
+  .stockrow{display:flex; align-items:center; gap:8px; padding:4px 14px 0;}
+  .stockrow .lvl{font-size:12.5px; flex:1;}
+  .lvl.ok{color:var(--green);} .lvl.low{color:#f0a35a;} .lvl.out{color:var(--red);} .lvl.na{color:var(--soft);}
+  .qbtn{width:30px; height:30px; background:var(--panel); border:1px solid var(--line); cursor:pointer; font-size:15px; line-height:1;}
+  .qbtn:hover{border-color:var(--gold); color:var(--gold);}
+  .qbtn:disabled{opacity:.4; cursor:wait;}
+  .badge.low{background:#f0a35a; color:#1a1208;} .badge.out{background:var(--red); color:#fff;}
+
+  /* editor */
+  .ov{position:fixed; inset:0; background:rgba(0,0,0,.72); z-index:50; display:flex; justify-content:flex-end;}
+  .ed{width:min(720px,100%); height:100%; background:var(--bg); border-left:1px solid var(--line); display:flex; flex-direction:column;}
+  .ed header{display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid var(--line);}
+  .ed header h3{font-size:26px;}
+  .ed .x{background:none; border:1px solid var(--line); width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:16px;}
+  .ed .x:hover{border-color:var(--gold); color:var(--gold);}
+  .ed .body{flex:1; overflow-y:auto; padding:6px 22px 30px;}
+  .ed footer{border-top:1px solid var(--line); padding:14px 22px calc(14px + env(safe-area-inset-bottom,0px)); display:flex; gap:10px; justify-content:flex-end; align-items:center;}
+  .ed footer .msg{margin-right:auto; font-size:12.5px; color:var(--soft);}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:0 14px;}
+  .row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:0 14px;}
+  .sec{font-family:'Cormorant Garamond',serif; font-size:20px; margin:26px 0 2px; padding-bottom:6px; border-bottom:1px solid var(--line);}
+  .photos{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .drop{border:1px dashed #4a412f; background:var(--card); aspect-ratio:1/1; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:6px; cursor:pointer; overflow:hidden; color:var(--soft); font-size:12.5px; padding:10px;}
+  .drop:hover,.drop.over{border-color:var(--gold);}
+  .drop img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:var(--panel);}
+  .drop .big{font-size:26px;}
+  .drop .clear{position:absolute; top:6px; right:6px; z-index:2; background:rgba(0,0,0,.75); border:1px solid var(--line); color:var(--ink); width:28px; height:28px; border-radius:50%; cursor:pointer;}
+  .checks{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;}
+  .check{display:flex; gap:10px; align-items:flex-start; border:1px solid var(--line); background:var(--card); padding:11px 12px; cursor:pointer; font-size:13.5px;}
+  .check input{margin-top:3px; accent-color:var(--gold); width:16px; height:16px;}
+  .check small{display:block; color:var(--soft); font-size:11.5px; margin-top:2px;}
+  .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); background:var(--gold); color:#171410; padding:11px 20px; font-size:13.5px; opacity:0; transition:all .25s; z-index:90; pointer-events:none;}
+  .toast.show{opacity:1; transform:translateX(-50%);}
+  .toast.bad{background:var(--red); color:#fff;}
+  @media(max-width:640px){
+    header.top .who{display:none;}
+    .row,.row3,.photos,.checks{grid-template-columns:1fr;}
+    .photos{grid-template-columns:1fr 1fr;}
+    .bar input,.bar select{flex:1; min-width:0;}
+    .list{grid-template-columns:1fr 1fr; gap:10px;}
+    .item .acts .btn{padding:7px 6px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- not configured -->
+<div class="center hidden" id="vSetup"><div class="box">
+  <img src="images/logo.png" alt="Ziyaan Elite">
+  <h1>Admin not connected yet</h1>
+  <p class="sub">The admin page needs your Supabase database.</p>
+  <p class="hint" style="font-size:13.5px">Open <code>config.js</code> and paste your <b>Project URL</b> and <b>anon public key</b> from Supabase → Project Settings → API. Then upload the site again. The full steps are in <code>HOW-TO-GO-LIVE.md</code>.</p>
+  <div class="err hidden" id="setupErr"></div>
+</div></div>
+
+<!-- login -->
+<div class="center hidden" id="vLogin"><form class="box" id="loginForm">
+  <img src="images/logo.png" alt="Ziyaan Elite">
+  <h1>Admin Sign In</h1>
+  <p class="sub">Manage the sprays on your shop</p>
+  <label for="email">Email</label>
+  <input type="email" id="email" autocomplete="username" required>
+  <label for="pass">Password</label>
+  <input type="password" id="pass" autocomplete="current-password" required>
+  <button class="btn" id="loginBtn" type="submit">SIGN IN</button>
+  <div class="err hidden" id="loginErr"></div>
+</form></div>
+
+<!-- not admin -->
+<div class="center hidden" id="vNoAdmin"><div class="box">
+  <img src="images/logo.png" alt="Ziyaan Elite">
+  <h1>Not an admin yet</h1>
+  <p class="sub" id="noAdminWho"></p>
+  <p class="hint" style="font-size:13.5px">This login works, but it hasn't been given admin rights. In Supabase, open <b>SQL Editor</b> and run:</p>
+  <pre id="noAdminSql"></pre>
+  <button class="btn" type="button" data-signout style="width:100%;margin-top:18px">SIGN OUT</button>
+</div></div>
+
+<!-- dashboard -->
+<div class="hidden" id="vApp">
+  <header class="top"><div class="in">
+    <img src="images/logo.png" alt="">
+    <span class="t">Spray Manager</span>
+    <span class="who" id="who"></span>
+    <a class="btn ghost sm" href="index.html" target="_blank" rel="noopener">View shop ↗</a>
+    <button class="btn ghost sm" type="button" data-signout>Sign out</button>
+  </div></header>
+  <main>
+    <div class="bar">
+      <h2>Your Sprays</h2>
+      <input type="search" id="q" placeholder="Search name or brand…" aria-label="Search">
+      <select id="fCat" aria-label="Filter">
+        <option value="">All sprays</option>
+        <option value="designer">Designer</option>
+        <option value="niche">Niche</option>
+        <option value="arabian">Arabian</option>
+        <option value="oud">Oud</option>
+        <option value="best">Best sellers</option>
+        <option value="featured">In top slider</option>
+        <option value="hidden">Hidden</option>
+        <option value="low">Low stock</option>
+        <option value="out">Out of stock</option>
+      </select>
+      <button class="btn" type="button" id="addBtn">+ ADD SPRAY</button>
+    </div>
+    <div id="alerts"></div>
+    <div class="stats" id="stats"></div>
+    <div class="list" id="list"><p class="empty">Loading…</p></div>
+  </main>
+</div>
+
+<!-- editor -->
+<div class="ov hidden" id="ov">
+  <form class="ed" id="ed" novalidate>
+    <header><h3 id="edTitle">Add Spray</h3><button class="x" type="button" id="edClose" aria-label="Close">✕</button></header>
+    <div class="body">
+      <div class="sec">Photos</div>
+      <div class="photos">
+        <div>
+          <label>Main photo *</label>
+          <div class="drop" id="dropMain" tabindex="0"><span class="big">📷</span><span>Tap to choose a photo<br>or drag it here</span><span class="hint">Square photos look best</span></div>
+          <input type="file" id="fileMain" accept="image/*" class="hidden">
+        </div>
+        <div>
+          <label>Slider photo (optional)</label>
+          <div class="drop" id="dropHero" tabindex="0"><span class="big">✨</span><span>Cut-out photo with a<br>transparent background</span><span class="hint">Used in the big top slider</span></div>
+          <input type="file" id="fileHero" accept="image/*" class="hidden">
+        </div>
+      </div>
+
+      <div class="sec">Details</div>
+      <div class="row">
+        <div><label for="fBrand">Brand *</label><input type="text" id="fBrand" placeholder="e.g. Dior" required></div>
+        <div><label for="fName">Spray name *</label><input type="text" id="fName" placeholder="e.g. Sauvage Elixir" required></div>
+      </div>
+      <div class="row">
+        <div><label for="fPrice">Price (KES) *</label><input type="number" id="fPrice" min="0" step="50" placeholder="e.g. 18500" required></div>
+        <div><label for="fCategory">Category *</label>
+          <select id="fCategory"><option value="designer">Designer</option><option value="niche">Niche</option><option value="arabian">Arabian</option></select></div>
+      </div>
+      <div class="checks">
+        <label class="check"><input type="checkbox" id="fActive" checked><span>Show on shop<small>Untick to hide without deleting</small></span></label>
+        <label class="check"><input type="checkbox" id="fOud"><span>Oud spray<small>Appears in the Oud Collection</small></span></label>
+        <label class="check"><input type="checkbox" id="fBest"><span>Best seller<small>Gets a Bestseller badge</small></span></label>
+        <label class="check"><input type="checkbox" id="fFeatured"><span>Show in top slider<small>The big rotating picture</small></span></label>
+      </div>
+
+      <div class="sec">Story</div>
+      <label for="fTagline">Tagline</label>
+      <input type="text" id="fTagline" maxlength="120" placeholder="e.g. Wide-open skies and raw, untamed freshness.">
+      <label for="fStory">The story</label>
+      <textarea id="fStory" rows="7" placeholder="Where the scent comes from and how it smells. Leave an empty line between paragraphs."></textarea>
+      <label for="fNotes">Key notes</label>
+      <input type="text" id="fNotes" placeholder="e.g. Bergamot, Pepper, Lavender, Vanilla">
+      <div class="hint">Separate notes with commas.</div>
+      <div class="row3">
+        <div><label for="fOccasion">Occasion</label><input type="text" id="fOccasion" list="lOcc" placeholder="e.g. Evening"></div>
+        <div><label for="fSeason">Season</label><input type="text" id="fSeason" list="lSea" placeholder="e.g. All year"></div>
+        <div><label for="fPerf">Performance</label><input type="text" id="fPerf" list="lPerf" placeholder="e.g. Long-lasting"></div>
+      </div>
+      <datalist id="lOcc"><option>Daily wear</option><option>Office</option><option>Evening</option><option>Date night</option><option>Night out</option><option>Anytime</option></datalist>
+      <datalist id="lSea"><option>All year</option><option>Hot weather</option><option>Cool season</option><option>Spring & summer</option></datalist>
+      <datalist id="lPerf"><option>Moderate</option><option>Long-lasting</option><option>Strong</option><option>Beast mode</option><option>Versatile</option></datalist>
+
+      <div class="sec">Stock</div>
+      <div class="row">
+        <div><label for="fStock">Bottles in stock</label><input type="number" id="fStock" min="0" step="1" placeholder="Leave empty to not track"></div>
+        <div><label for="fLow">Warn me at</label><input type="number" id="fLow" min="0" step="1" value="3"></div>
+      </div>
+      <div class="hint">When stock reaches the warning level, the admin page alerts you and the shop shows "Only X left". At 0 the shop shows "Out of stock" and customers can't add it to the cart.</div>
+
+      <div class="sec">Order on shop</div>
+      <label for="fSort">Position</label>
+      <input type="number" id="fSort" step="1" value="100">
+      <div class="hint">Lower numbers show first (e.g. 5 shows before 20).</div>
+      <div class="err hidden" id="edErr"></div>
+    </div>
+    <footer><span class="msg" id="edMsg"></span><button class="btn ghost" type="button" id="edCancel">Cancel</button><button class="btn" type="submit" id="edSave">SAVE SPRAY</button></footer>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  var CFG=window.ZIYAAN_CONFIG||{}, BUCKET='product-images';
+  var $=function(id){return document.getElementById(id)};
+  var VIEWS=['vSetup','vLogin','vNoAdmin','vApp'];
+  function view(v){VIEWS.forEach(function(x){$(x).classList.toggle('hidden',x!==v)})}
+  function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function money(n){return 'KES '+Math.round(+n||0).toLocaleString('en-KE')}
+  function toast(t,bad){var e=$('toast'); e.textContent=t; e.classList.toggle('bad',!!bad); e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(function(){e.classList.remove('show')},2400)}
+  function showErr(id,msg){var e=$(id); e.textContent=msg||''; e.classList.toggle('hidden',!msg)}
+  function friendly(err){
+    var m=(err&&(err.message||err.error_description))||String(err||'Something went wrong');
+    if(/Invalid login credentials/i.test(m)) return 'Wrong email or password.';
+    if(/row-level security|violates|permission denied|not authorized|Unauthorized/i.test(m)) return 'This account is not allowed to make changes. Make sure it has been added as an admin.';
+    if(/Failed to fetch|NetworkError|network/i.test(m)) return 'Could not reach the database. Check your internet connection.';
+    if(/Bucket not found/i.test(m)) return 'Photo storage is not set up. Run supabase-setup.sql in Supabase first.';
+    if(/relation .*products.* does not exist/i.test(m)) return 'The products table is missing. Run supabase-setup.sql in Supabase first.';
+    return m;
+  }
+
+  if(!CFG.supabaseUrl||!CFG.supabaseAnonKey){ view('vSetup'); return; }
+  if(!window.supabase){ view('vSetup'); showErr('setupErr','Could not load the Supabase library. Check your internet connection and refresh.'); return; }
+  var db=window.supabase.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey);
+  var me=null, ITEMS=[];
+
+  /* ---------- auth ---------- */
+  async function boot(){
+    var s=await db.auth.getSession(); var user=s&&s.data&&s.data.session&&s.data.session.user;
+    if(!user){ view('vLogin'); return; }
+    me=user;
+    var r=await db.from('admins').select('user_id').eq('user_id',user.id).maybeSingle();
+    if(r.error||!r.data){
+      $('noAdminWho').textContent='Signed in as '+user.email;
+      $('noAdminSql').textContent="insert into public.admins (user_id)\n  select id from auth.users where email = '"+String(user.email).replace(/'/g,"''")+"'\non conflict do nothing;";
+      view('vNoAdmin'); return;
+    }
+    $('who').textContent=user.email; view('vApp'); load();
+  }
+  $('loginForm').addEventListener('submit',async function(e){
+    e.preventDefault(); showErr('loginErr',''); var b=$('loginBtn'); b.disabled=true; b.textContent='SIGNING IN…';
+    var r=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});
+    b.disabled=false; b.textContent='SIGN IN';
+    if(r.error){ showErr('loginErr',friendly(r.error)); return; }
+    $('pass').value=''; boot();
+  });
+  document.addEventListener('click',async function(e){
+    if(!e.target.closest('[data-signout]')) return;
+    await db.auth.signOut(); me=null; view('vLogin');
+  });
+
+  /* ---------- stock ---------- */
+  function tracked(p){return p.stock!==null&&p.stock!==undefined}
+  function isOut(p){return tracked(p)&&p.stock<=0}
+  function isLow(p){return tracked(p)&&p.stock>0&&p.stock<=(p.low_stock_at==null?3:p.low_stock_at)}
+  function level(p){
+    if(!tracked(p)) return '<span class="lvl na">Stock not tracked</span>';
+    if(isOut(p)) return '<span class="lvl out">● Out of stock</span>';
+    if(isLow(p)) return '<span class="lvl low">● Low: '+p.stock+' left</span>';
+    return '<span class="lvl ok">● '+p.stock+' in stock</span>';
+  }
+  function drawAlerts(){
+    var act=ITEMS.filter(function(p){return p.active}), out=act.filter(isOut), low=act.filter(isLow);
+    var link=function(p){return '<a data-jump="'+esc(p.id)+'">'+esc(p.brand+' '+p.name)+(isLow(p)?' ('+p.stock+' left)':'')+'</a>'};
+    if(!out.length&&!low.length){ $('alerts').innerHTML=''; document.title='Ziyaan Elite — Admin'; return; }
+    var title=[out.length?out.length+' out of stock':'',low.length?low.length+' running low':''].filter(Boolean).join(' · ');
+    document.title='('+(out.length+low.length)+') Ziyaan Elite — Admin';
+    $('alerts').innerHTML='<div class="alerts'+(out.length?' bad':'')+'"><span class="ic">⚠️</span><div><b>Restock needed: '+title+'</b><div class="names">'+
+      (out.length?'Out: '+out.map(link).join(', ')+'<br>':'')+(low.length?'Low: '+low.map(link).join(', '):'')+'</div></div>'+
+      '<button class="btn ghost sm" type="button" data-filterto="'+(out.length?'out':'low')+'">Show them</button></div>';
+  }
+  $('alerts').addEventListener('click',function(e){
+    var j=e.target.closest('[data-jump]'); if(j){ var p=ITEMS.find(function(x){return String(x.id)===j.dataset.jump}); if(p) openEditor(p); return; }
+    var f=e.target.closest('[data-filterto]'); if(f){ $('fCat').value=f.dataset.filterto; $('q').value=''; draw(); }
+  });
+  $('stats').addEventListener('click',function(e){ var f=e.target.closest('[data-filterto]'); if(f){ $('fCat').value=f.dataset.filterto; draw(); } });
+  async function adjustStock(p,delta,btn){
+    var cur=tracked(p)?p.stock:0, next=Math.max(0,cur+delta);
+    btn.disabled=true;
+    var r=await db.from('products').update({stock:next,updated_at:new Date().toISOString()}).eq('id',p.id).select();
+    btn.disabled=false;
+    if(r.error||!(r.data&&r.data.length)) return toast(friendly(r.error||'not authorized'),true);
+    p.stock=next; draw();
+    if(next===0) toast(p.name+' is now OUT OF STOCK',true);
+    else if(isLow(p)) toast(p.name+': only '+next+' left — time to restock');
+    else toast(p.name+': '+next+' in stock');
+  }
+
+  /* ---------- list ---------- */
+  async function load(){
+    var r=await db.from('products').select('*').order('sort_order',{ascending:true}).order('name',{ascending:true});
+    if(r.error){ $('list').innerHTML='<p class="empty">'+esc(friendly(r.error))+'</p>'; return; }
+    ITEMS=r.data||[]; draw();
+  }
+  function matches(p){
+    var q=$('q').value.trim().toLowerCase(), f=$('fCat').value;
+    if(q&&(p.brand+' '+p.name).toLowerCase().indexOf(q)<0) return false;
+    if(!f) return true;
+    if(f==='low') return p.active&&isLow(p); if(f==='out') return p.active&&isOut(p);
+    if(f==='oud') return p.is_oud; if(f==='best') return p.is_best; if(f==='featured') return p.featured; if(f==='hidden') return !p.active;
+    return p.category===f;
+  }
+  function draw(){
+    var vis=ITEMS.filter(function(p){return p.active}).length;
+    var act=ITEMS.filter(function(p){return p.active}), nLow=act.filter(isLow).length, nOut=act.filter(isOut).length;
+    var bottles=ITEMS.reduce(function(t,p){return t+(tracked(p)?+p.stock:0)},0), worth=ITEMS.reduce(function(t,p){return t+(tracked(p)?p.stock*p.price:0)},0);
+    $('stats').innerHTML='<div class="stat"><b>'+ITEMS.length+'</b>sprays</div><div class="stat"><b>'+vis+'</b>on the shop</div><div class="stat"><b>'+bottles+'</b>bottles in stock</div><div class="stat"><b>'+money(worth)+'</b>stock value</div>'+
+      '<div class="stat click'+(nLow?' warn':'')+'" data-filterto="low"><b>'+nLow+'</b>running low</div><div class="stat click'+(nOut?' bad':'')+'" data-filterto="out"><b>'+nOut+'</b>out of stock</div><div class="stat"><b>'+(ITEMS.length-vis)+'</b>hidden</div>';
+    drawAlerts();
+    var list=ITEMS.filter(matches);
+    $('list').innerHTML=list.map(function(p){
+      var b=(isOut(p)?'<span class="badge out">OUT</span>':isLow(p)?'<span class="badge low">LOW</span>':'')+(!p.active?'<span class="badge h">HIDDEN</span>':'')+(p.featured?'<span class="badge">SLIDER</span>':'')+(p.is_best?'<span class="badge">BESTSELLER</span>':'')+(p.is_oud?'<span class="badge o">OUD</span>':'');
+      return '<div class="item'+(p.active?'':' off')+'" data-id="'+esc(p.id)+'"><div class="ph">'+(p.image_url?'<img src="'+esc(p.image_url)+'" alt="" loading="lazy">':'No photo')+'<div class="badges">'+b+'</div></div>'+
+        '<div class="meta"><div class="b">'+esc(p.brand)+' · '+esc(p.category)+'</div><div class="n">'+esc(p.name)+'</div><div class="p">'+money(p.price)+'</div></div>'+
+        '<div class="stockrow">'+level(p)+'<button class="qbtn" type="button" data-act="minus" title="Sold one (−1)" aria-label="Sold one">−</button><button class="qbtn" type="button" data-act="plus" title="Restocked one (+1)" aria-label="Add one to stock">+</button></div>'+
+        '<div class="acts"><button class="btn sm" type="button" data-act="edit">Edit</button><button class="btn ghost sm" type="button" data-act="toggle">'+(p.active?'Hide':'Show')+'</button><button class="btn danger sm" type="button" data-act="del">Delete</button></div></div>';
+    }).join('')||'<p class="empty">'+(ITEMS.length?'No sprays match your search.':'No sprays yet — click <b>+ ADD SPRAY</b> to add your first one.')+'</p>';
+  }
+  $('q').addEventListener('input',draw); $('fCat').addEventListener('change',draw);
+  $('list').addEventListener('click',async function(e){
+    var btn=e.target.closest('[data-act]'); if(!btn) return;
+    var id=btn.closest('.item').dataset.id, p=ITEMS.find(function(x){return String(x.id)===id}); if(!p) return;
+    var act=btn.dataset.act;
+    if(act==='edit') return openEditor(p);
+    if(act==='minus') return adjustStock(p,-1,btn);
+    if(act==='plus') return adjustStock(p,1,btn);
+    if(act==='toggle'){
+      btn.disabled=true;
+      var r=await db.from('products').update({active:!p.active,updated_at:new Date().toISOString()}).eq('id',p.id);
+      if(r.error){ btn.disabled=false; return toast(friendly(r.error),true); }
+      toast(p.name+(p.active?' hidden from shop':' is back on the shop')); return load();
+    }
+    if(act==='del'){
+      if(!btn.classList.contains('confirm')){ btn.classList.add('confirm'); btn.textContent='Sure?'; setTimeout(function(){btn.classList.remove('confirm'); btn.textContent='Delete'},3500); return; }
+      btn.disabled=true;
+      var d=await db.from('products').delete().eq('id',p.id);
+      if(d.error){ btn.disabled=false; return toast(friendly(d.error),true); }
+      [p.image_url,p.hero_image_url].forEach(function(u){var path=storagePath(u); if(path) db.storage.from(BUCKET).remove([path]);});
+      toast(p.name+' deleted'); load();
+    }
+  });
+
+  /* ---------- photos ---------- */
+  var photo={main:{file:null,url:''},hero:{file:null,url:''}};
+  function storagePath(u){ var m=String(u||'').split('/storage/v1/object/public/'+BUCKET+'/'); return m.length===2?decodeURIComponent(m[1].split('?')[0]):''; }
+  function setupDrop(key,dropId,inputId){
+    var drop=$(dropId), input=$(inputId), blank=drop.innerHTML;
+    function paint(){
+      var src=photo[key].file?URL.createObjectURL(photo[key].file):photo[key].url;
+      drop.innerHTML=src?'<img src="'+esc(src)+'" alt=""><button type="button" class="clear" aria-label="Remove photo">✕</button>':blank;
+    }
+    photo[key].paint=paint;
+    drop.addEventListener('click',function(e){ if(e.target.closest('.clear')){ e.stopPropagation(); photo[key].file=null; photo[key].url=''; paint(); return; } input.click(); });
+    drop.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); input.click(); } });
+    input.addEventListener('change',function(){ if(input.files[0]){ photo[key].file=input.files[0]; paint(); } input.value=''; });
+    ['dragenter','dragover'].forEach(function(t){drop.addEventListener(t,function(e){e.preventDefault(); drop.classList.add('over')})});
+    ['dragleave','drop'].forEach(function(t){drop.addEventListener(t,function(e){e.preventDefault(); drop.classList.remove('over')})});
+    drop.addEventListener('drop',function(e){ var f=e.dataTransfer.files[0]; if(f&&/^image\//.test(f.type)){ photo[key].file=f; paint(); } });
+  }
+  setupDrop('main','dropMain','fileMain'); setupDrop('hero','dropHero','fileHero');
+
+  function shrink(file,max,type,quality){
+    return new Promise(function(res){
+      var img=new Image(), url=URL.createObjectURL(file);
+      img.onload=function(){
+        var s=Math.min(1,max/Math.max(img.width,img.height)), w=Math.round(img.width*s), h=Math.round(img.height*s);
+        var c=document.createElement('canvas'); c.width=w; c.height=h; var x=c.getContext('2d');
+        if(type==='image/jpeg'){ x.fillStyle='#fff'; x.fillRect(0,0,w,h); }
+        x.drawImage(img,0,0,w,h); URL.revokeObjectURL(url);
+        c.toBlob(function(b){ res(b||file); },type,quality);
+      };
+      img.onerror=function(){ URL.revokeObjectURL(url); res(file); };
+      img.src=url;
+    });
+  }
+  function slug(t){return String(t).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,50)||'spray'}
+  async function upload(key,base){
+    var ph=photo[key]; if(!ph.file) return ph.url;
+    var isHero=key==='hero', type=isHero?'image/webp':'image/jpeg';
+    var blob=await shrink(ph.file,isHero?900:1100,type,0.86);
+    var ext={'image/webp':'.webp','image/png':'.png','image/jpeg':'.jpg'}[blob.type]||'.jpg';
+    var path=base+(isHero?'-slider':'')+'-'+Date.now().toString(36)+ext;
+    var r=await db.storage.from(BUCKET).upload(path,blob,{contentType:blob.type||type,cacheControl:'31536000',upsert:false});
+    if(r.error) throw r.error;
+    return db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  }
+
+  /* ---------- editor ---------- */
+  var editing=null;
+  var F={brand:'fBrand',name:'fName',price:'fPrice',category:'fCategory',tagline:'fTagline',story:'fStory',occasion:'fOccasion',season:'fSeason',performance:'fPerf',sort_order:'fSort'};
+  var C={active:'fActive',is_oud:'fOud',is_best:'fBest',featured:'fFeatured'};
+  function openEditor(p){
+    editing=p||null; showErr('edErr',''); $('edMsg').textContent='';
+    $('edTitle').textContent=p?'Edit '+p.name:'Add Spray';
+    var maxSort=ITEMS.reduce(function(m,x){return Math.max(m,+x.sort_order||0)},0);
+    Object.keys(F).forEach(function(k){ $(F[k]).value=p?(p[k]==null?'':p[k]):(k==='category'?'designer':k==='sort_order'?maxSort+10:''); });
+    Object.keys(C).forEach(function(k){ $(C[k]).checked=p?!!p[k]:(k==='active'); });
+    $('fNotes').value=p&&p.notes?p.notes.join(', '):'';
+    $('fStock').value=p&&tracked(p)?p.stock:''; $('fLow').value=p&&p.low_stock_at!=null?p.low_stock_at:3;
+    photo.main.file=null; photo.main.url=p?p.image_url||'':''; photo.main.paint();
+    photo.hero.file=null; photo.hero.url=p?p.hero_image_url||'':''; photo.hero.paint();
+    $('ov').classList.remove('hidden'); document.querySelector('.ed .body').scrollTop=0;
+    setTimeout(function(){ $('fBrand').focus(); },50);
+  }
+  function closeEditor(){ $('ov').classList.add('hidden'); editing=null; }
+  $('addBtn').addEventListener('click',function(){openEditor(null)});
+  $('edClose').addEventListener('click',closeEditor); $('edCancel').addEventListener('click',closeEditor);
+  $('ov').addEventListener('click',function(e){ if(e.target===this) closeEditor(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!$('ov').classList.contains('hidden')) closeEditor(); });
+
+  $('ed').addEventListener('submit',async function(e){
+    e.preventDefault(); showErr('edErr','');
+    var row={};
+    Object.keys(F).forEach(function(k){ row[k]=$(F[k]).value.trim(); });
+    Object.keys(C).forEach(function(k){ row[k]=$(C[k]).checked; });
+    row.notes=$('fNotes').value.split(',').map(function(s){return s.trim()}).filter(Boolean);
+    row.price=Math.round(+row.price); row.sort_order=parseInt(row.sort_order,10); if(isNaN(row.sort_order)) row.sort_order=100;
+    var sv=$('fStock').value.trim(); row.stock=sv===''?null:Math.max(0,parseInt(sv,10)||0);
+    row.low_stock_at=Math.max(0,parseInt($('fLow').value,10)||0);
+    var miss=[]; if(!row.brand) miss.push('brand'); if(!row.name) miss.push('spray name'); if(!(row.price>0)) miss.push('price'); if(!photo.main.file&&!photo.main.url) miss.push('main photo');
+    if(miss.length){ showErr('edErr','Please add the '+miss.join(', ')+'.'); return; }
+    var save=$('edSave'); save.disabled=true;
+    try{
+      var base=slug(row.brand+'-'+row.name);
+      $('edMsg').textContent=(photo.main.file||photo.hero.file)?'Uploading photos…':'Saving…';
+      row.image_url=await upload('main',base);
+      row.hero_image_url=await upload('hero',base);
+      $('edMsg').textContent='Saving…';
+      row.updated_at=new Date().toISOString();
+      var r=editing?await db.from('products').update(row).eq('id',editing.id).select():await db.from('products').insert(row).select();
+      if(r.error) throw r.error;
+      if(editing&&!(r.data&&r.data.length)) throw new Error('not authorized');
+      if(editing){ [['image_url',editing.image_url],['hero_image_url',editing.hero_image_url]].forEach(function(x){ if(x[1]&&x[1]!==row[x[0]]){ var path=storagePath(x[1]); if(path) db.storage.from(BUCKET).remove([path]); } }); }
+      toast(row.name+(editing?' updated':' added to the shop')); closeEditor(); load();
+    }catch(err){ showErr('edErr',friendly(err)); }
+    finally{ save.disabled=false; $('edMsg').textContent=''; }
+  });
+
+  // keep stock numbers fresh if another admin changes them
+  setInterval(function(){ if(!$('vApp').classList.contains('hidden')&&$('ov').classList.contains('hidden')&&!document.hidden) load(); },60000);
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden&&!$('vApp').classList.contains('hidden')&&$('ov').classList.contains('hidden')) load(); });
+  db.auth.onAuthStateChange(function(ev){ if(ev==='SIGNED_OUT') view('vLogin'); });
+  boot().catch(function(err){ view('vLogin'); showErr('loginErr',friendly(err)); });
+})();
+</script>
+</body>
+</html>

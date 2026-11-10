@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Ziyaan Elite — original niche, designer and oud fragrances in Kenya. Pay with M-Pesa or on delivery.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ziyaan Elite — Premium Fragrances</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#050505; --ink:#f8ecd2; --ink-soft:#b9a878;
+    --rose:#1c1710; --rose-deep:#f0b84f; --gold:#eab647;
+    --line:#242019; --card:#0e0d0b; --panel:#0a0908;
+    --surface:#000; --wa-shadow:rgba(0,0,0,.55);
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top,0px);
+    padding-bottom: env(safe-area-inset-bottom,0px);
+  }
+  :root[data-theme="light"]{
+    --cream:#faf7f2; --ink:#1c1a17; --ink-soft:#4a453e;
+    --rose:#f3e6cf; --rose-deep:#8a6a2e; --gold:#b08d57;
+    --line:#e6e1d8; --card:#f3efe7; --panel:#f7f4ee;
+    --surface:#1c1a17; --wa-shadow:rgba(0,0,0,.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-padding-top: calc(env(safe-area-inset-top,0px) + 90px); scroll-behavior:smooth;}
+  body{
+    font-family:'Jost',sans-serif; color:var(--ink); background:var(--cream);
+    transition:background .25s ease, color .25s ease;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Cormorant Garamond',serif; font-weight:500; letter-spacing:.01em;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1240px; margin:0 auto; padding:0 32px;}
+
+  /* topbar */
+  .topbar{background:var(--surface); color:var(--gold); font-size:12.5px; border-bottom:1px solid var(--line);}
+  .topbar .wrap{display:flex; justify-content:space-between; align-items:center; padding:8px 32px; flex-wrap:wrap; gap:6px;}
+  .topbar span{opacity:.9}
+
+  /* nav */
+  nav{background:var(--cream); border-bottom:1px solid var(--line);}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:18px 32px;}
+  .logo{text-align:left; line-height:1.05;}
+  .logo .name{font-family:'Cormorant Garamond',serif; font-size:24px; letter-spacing:.18em; white-space:nowrap;}
+  .logo .tag{font-size:9.5px; letter-spacing:.24em; color:var(--ink-soft); display:block; margin-top:2px;}
+  .navlinks{display:flex; gap:32px; font-size:14.5px;}
+  .navlinks a{padding:6px 0; border-bottom:2px solid transparent;}
+  .navlinks a.active{border-color:var(--gold);}
+  .navicons{display:flex; align-items:center; gap:20px;}
+  .navicons .cart{position:relative;}
+  .navicons .badge{position:absolute; top:-8px; right:-10px; background:var(--gold); color:#000; font-size:10px; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center;}
+  .theme-toggle{background:var(--card); border:1px solid var(--line); border-radius:20px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; transition:border-color .2s;}
+  .theme-toggle:hover{border-color:var(--gold);}
+  .theme-toggle .tt-icon{display:none;}
+  :root[data-theme="light"] .tt-sun{display:inline;}
+  :root:not([data-theme="light"]) .tt-moon{display:inline;}
+
+  /* hero */
+  .hero{
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(ellipse 460px 340px at 88% 18%, rgba(234,182,71,.22), transparent 70%),
+      radial-gradient(ellipse 400px 320px at 76% 88%, rgba(234,182,71,.1), transparent 70%),
+      var(--cream);
+    transition:background .25s ease;
+  }
+  .hero .wrap{display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:40px; padding:70px 32px; position:relative; z-index:2;}
+  .hero .petals{position:absolute; inset:0; z-index:1; pointer-events:none;}
+  .eyebrow{font-size:12.5px; letter-spacing:.18em; color:var(--gold); margin-bottom:16px; display:flex; align-items:center; gap:10px;}
+  .eyebrow::before{content:""; width:28px; height:2px; background:var(--gold); display:inline-block;}
+  .hero h1{font-size:52px; line-height:1.12; margin-bottom:20px;}
+  .hero h1 em{font-style:italic; background:linear-gradient(90deg,var(--gold),var(--rose-deep)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .hero p{color:var(--ink-soft); font-size:16px; max-width:38ch; margin-bottom:30px; line-height:1.6;}
+  .btn{display:inline-flex; align-items:center; gap:10px; background:var(--gold); color:#171410; padding:15px 26px; font-size:13.5px; letter-spacing:.08em;}
+  .btn:hover{background:#e3c07e;}
+  .hero-art{position:relative; display:flex; align-items:center; justify-content:center; padding-bottom:78px;}
+  .bottle{position:absolute;}
+  .dots{display:flex; gap:8px; justify-content:center; margin-top:26px;}
+  .dots span{width:7px; height:7px; border-radius:50%; background:#3a362c;}
+  .dots span{cursor:pointer; position:relative; transition:all .3s;}
+  .dots span::after{content:""; position:absolute; inset:-9px;}
+  .dots span.on{background:var(--gold); width:22px; border-radius:5px;}
+
+  /* categories */
+  .cats{padding:48px 32px 8px;}
+  .cats .wrap{padding:0; display:grid; grid-template-columns:repeat(5,1fr); gap:18px;}
+  .cat{background:var(--card); border:1px solid var(--line); padding:26px 22px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:14px; transition:border-color .2s;}
+  .cat:hover{border-color:var(--gold);}
+  .cat .icon{width:56px; height:56px; display:flex; align-items:center; justify-content:center;}
+  .cat h3{font-size:16px; font-family:'Jost',sans-serif; font-weight:500;}
+  .cat .shop{font-size:11.5px; letter-spacing:.1em; color:var(--ink-soft); display:flex; align-items:center; gap:5px;}
+
+  /* best sellers */
+  .best{padding:64px 32px 90px;}
+  .best-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px;}
+  .best-head .k{font-size:12px; letter-spacing:.16em; color:var(--gold); margin-bottom:8px;}
+  .best-head h2{font-size:34px;}
+  .viewall{font-size:13.5px; display:flex; align-items:center; gap:6px; cursor:pointer; border-bottom:1px solid transparent;}
+  .viewall:hover{border-color:var(--gold); color:var(--gold);}
+  .grid{display:grid; grid-template-columns:repeat(5,1fr); gap:20px;}
+  .product{background:var(--card); border:1px solid var(--line); position:relative; display:flex; flex-direction:column; transition:border-color .2s;}
+  .product:hover{border-color:var(--gold);}
+  .product .tag{position:absolute; top:14px; left:14px; background:var(--gold); color:#171410; font-size:10.5px; padding:4px 10px; letter-spacing:.04em; z-index:2; font-weight:600;}
+  .product .tag.new{background:transparent; color:var(--gold); border:1px solid var(--gold);}
+  .product .tag.sold{background:#5a1f1b; color:#ffd9d4;}
+  .product.soldout .imgbox img{filter:grayscale(.85) brightness(.7);}
+  .stock-note{font-size:12px; color:#f0a35a; margin-top:6px; letter-spacing:.02em;}
+  .stock-note.out{color:#e0645a;}
+  .add-btn:disabled,.pm-add:disabled{opacity:.45; cursor:not-allowed; background:transparent !important; color:var(--ink-soft) !important; border-color:var(--line) !important;}
+  .pm-stock{font-size:13px; color:#f0a35a; margin-top:-8px;} .pm-stock.out{color:#e0645a;}
+  .product .heart{position:absolute; top:12px; right:12px; z-index:2; font-size:17px; color:var(--ink-soft);}
+  .product .imgbox{aspect-ratio:1/1; overflow:hidden; display:flex; align-items:center; justify-content:center; background:var(--panel);}
+  .product .info{padding:16px 16px 20px;}
+  .product .name{font-size:15px; margin-bottom:6px;}
+  .stars{color:var(--gold); font-size:13px; margin-bottom:8px;}
+  .stars .count{color:var(--ink-soft); font-size:12px; margin-left:4px;}
+  .price{font-size:16px; font-weight:500;}
+
+  footer{background:var(--surface); color:var(--ink-soft); text-align:center; padding:26px; font-size:12.5px; border-top:1px solid var(--line);}
+
+  /* whatsapp */
+  .wa-float{position:fixed; bottom:22px; right:22px; z-index:50; display:flex; align-items:center; gap:12px; background:var(--card); border:1px solid var(--line); border-radius:40px; padding:10px 18px 10px 10px; box-shadow:0 6px 24px var(--wa-shadow); text-decoration:none; color:var(--ink); transition:background .25s ease, border-color .25s ease;}
+  .wa-float .bubble{width:44px; height:44px; border-radius:50%; background:#25D366; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .wa-float .bubble svg{width:24px; height:24px; fill:#fff;}
+  .wa-float .txt{line-height:1.25;}
+  .wa-float .txt .label{font-size:11.5px; color:var(--ink-soft);}
+  .wa-float .txt .name{font-size:14px; font-weight:600; display:flex; align-items:center; gap:5px;}
+  .wa-float .txt .sub{font-size:11px; color:var(--ink-soft);}
+  .wa-float{padding:6px; gap:0; border-radius:40px;}
+  .wa-float .txt{max-width:0; overflow:hidden; white-space:nowrap; opacity:0; transition:max-width .35s ease, opacity .25s ease, margin .35s ease;}
+  .wa-float:hover .txt,.wa-float:focus-visible .txt{max-width:220px; opacity:1; margin:0 12px 0 10px;}
+  .wa-float .bubble{width:50px; height:50px;}
+  .wa-float .bubble svg{width:27px; height:27px;}
+  body.pm-lock .wa-float, body.cart-open .wa-float{opacity:0; pointer-events:none;}
+  footer{padding-bottom:84px;}
+  @media(max-width:600px){ .wa-float{bottom:16px; right:16px; padding:5px;} .wa-float:hover .txt{max-width:0; opacity:0; margin:0;} .wa-float .bubble{width:48px; height:48px;} }
+
+
+  @media(max-width:980px){
+    .hero .wrap{grid-template-columns:1fr; text-align:center;}
+    .hero p{margin-inline:auto;}
+    .hero-art{order:-1;}
+    .navlinks{display:none;}
+    .cats .wrap, .grid{grid-template-columns:repeat(2,1fr); overflow-x:visible;}
+    .hero h1{font-size:38px;}
+  }
+
+  .product{cursor:pointer;}
+  .product.selected{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold), 0 8px 28px rgba(234,182,71,.18);}
+  .add-btn{margin-top:12px; width:100%; background:transparent; color:var(--gold); border:1px solid var(--gold); padding:10px; font:500 12px 'Jost',sans-serif; letter-spacing:.1em; cursor:pointer; transition:all .2s;}
+  .add-btn:hover,.product.selected .add-btn{background:var(--gold); color:#171410;}
+  .cart-btn{position:relative; background:none; border:none; font-size:20px; cursor:pointer; color:var(--ink);}
+  .overlay{position:fixed; inset:0; background:rgba(0,0,0,.55); opacity:0; pointer-events:none; transition:opacity .25s; z-index:90;}
+  .overlay.open{opacity:1; pointer-events:auto;}
+  .drawer{position:fixed; top:0; right:0; height:100%; width:min(400px,100%); background:var(--cream); border-left:1px solid var(--line); z-index:100; transform:translateX(100%); transition:transform .3s ease; display:flex; flex-direction:column; padding-top:env(safe-area-inset-top,0px);}
+  .drawer.open{transform:none;}
+  .drawer header{display:flex; justify-content:space-between; align-items:center; padding:20px 22px; border-bottom:1px solid var(--line);}
+  .drawer header h3{font-size:24px;}
+  .drawer .close{background:none; border:none; color:var(--ink); font-size:22px; cursor:pointer;}
+  .cart-items{flex:1; overflow-y:auto; padding:10px 22px;}
+  .cart-empty{color:var(--ink-soft); text-align:center; margin-top:60px; font-size:14px;}
+  .ci{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:16px 0; border-bottom:1px solid var(--line);}
+  .ci .n{font-size:14px; margin-bottom:4px;} .ci .p{color:var(--gold); font-size:14px;}
+  .qty{display:flex; align-items:center; gap:10px;}
+  .qty button{width:26px; height:26px; background:var(--card); color:var(--ink); border:1px solid var(--line); cursor:pointer;}
+  .qty button:hover{border-color:var(--gold);}
+  .drawer footer{padding:20px 22px calc(20px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line); background:var(--cream); text-align:left;}
+  .total{display:flex; justify-content:space-between; font-size:17px; margin-bottom:14px; color:var(--ink);}
+  .checkout{display:block; text-align:center; background:#25D366; color:#fff; padding:14px; font-size:13.5px; letter-spacing:.06em; font-weight:500;}
+  .checkout.disabled{opacity:.4; pointer-events:none;}
+  .toast{position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); background:var(--gold); color:#171410; padding:10px 20px; font-size:13px; opacity:0; transition:all .25s; z-index:120; pointer-events:none;}
+  .toast.show{opacity:1; transform:translateX(-50%);}
+
+  .mpesa-btn{display:block; width:100%; text-align:center; background:#4CAF50; color:#fff; border:none; padding:14px; font:500 13.5px 'Jost',sans-serif; letter-spacing:.06em; cursor:pointer; margin-bottom:10px;}
+  .mpesa-btn:disabled{opacity:.4; cursor:not-allowed;}
+  .mpesa-panel{display:none; border:1px solid var(--line); background:var(--card); padding:14px; margin-bottom:12px; font-size:13px; line-height:1.55; color:var(--ink);}
+  .mpesa-panel.open{display:block;}
+  .mpesa-panel ol{padding-left:18px; margin:8px 0;}
+  .mpesa-panel .num{display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--cream); border:1px solid var(--line); padding:8px 10px; margin:8px 0; font-weight:600; color:var(--gold);}
+  .mpesa-panel .num button{background:var(--gold); color:#171410; border:none; padding:5px 10px; font-size:11px; cursor:pointer;}
+  .mpesa-panel input{width:100%; padding:10px; margin:6px 0 10px; background:var(--cream); color:var(--ink); border:1px solid var(--line); font:14px 'Jost',sans-serif; text-transform:uppercase;}
+  .mpesa-panel input:focus{outline:none; border-color:var(--gold);}
+  .kes{font-size:12px; color:var(--ink-soft); text-align:right; margin:-8px 0 12px;}
+
+  .logo{display:block; line-height:0;}
+  .logo img{height:84px; width:auto; display:block;}
+  :root[data-theme="light"] .logo{background:#050505; border-radius:10px; padding:2px 8px;}
+  nav .wrap{padding-top:8px; padding-bottom:8px;}
+
+  .shop-desc{color:var(--ink-soft); font-size:14px; margin-top:8px; max-width:60ch;}
+  .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px;}
+  .tab{background:transparent; border:1px solid var(--line); color:var(--ink); padding:9px 18px; font:500 13px 'Jost',sans-serif; border-radius:30px; cursor:pointer; transition:all .2s;}
+  .tab:hover{border-color:var(--gold);}
+  .tab.active{background:var(--gold); border-color:var(--gold); color:#171410;}
+  .cat{cursor:pointer;} .cat.active{border-color:var(--gold);}
+  .product .brand{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:4px;}
+  .product .name{min-height:2.6em; line-height:1.3;}
+  .empty{grid-column:1/-1; text-align:center; color:var(--ink-soft); padding:40px 0;}
+  @media(max-width:600px){ .tabs{flex-wrap:nowrap; overflow-x:auto; padding-bottom:6px;} .tab{white-space:nowrap;} }
+  .product .imgbox img{width:100%; height:100%; object-fit:cover; display:block;}
+
+  .slider{position:relative; width:min(100%,400px); aspect-ratio:1/1; cursor:pointer;}
+  .slider::before{content:""; position:absolute; inset:6% 4% 2%; background:radial-gradient(ellipse at 50% 55%, rgba(234,182,71,.20), transparent 68%); filter:blur(12px); z-index:0;}
+  .slide{position:absolute; inset:0; opacity:0; transition:opacity .9s ease;}
+  .slide.on{opacity:1;}
+  .slide{z-index:1;}
+  .slide img{width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 18px 24px rgba(0,0,0,.55));}
+  .slide-cap{position:absolute; left:0; right:0; top:calc(100% + 10px); text-align:center; z-index:2; color:var(--ink); pointer-events:none; text-shadow:0 2px 12px var(--cream);}
+  .slide-cap .b{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold);}
+  .slide-cap .n{font-family:'Cormorant Garamond',serif; font-size:22px; margin:2px 0;}
+  .slide-cap .p{font-size:13px; opacity:.9;}
+  @media(max-width:980px){ .hero-art{height:auto; padding-bottom:74px;} .slider{width:min(100%,300px);} }
+
+  /* ---- spray story modal ---- */
+  .product .imgbox{position:relative;}
+  .product .story-hint{position:absolute; left:50%; bottom:12px; transform:translate(-50%,8px); background:rgba(5,5,5,.82); color:var(--gold); border:1px solid var(--gold); font-size:10.5px; letter-spacing:.14em; padding:6px 12px; white-space:nowrap; opacity:0; transition:all .25s; pointer-events:none;}
+  .product:hover .story-hint{opacity:1; transform:translate(-50%,0);}
+  .product .imgbox img{transition:transform .5s ease;}
+  .product:hover .imgbox img{transform:scale(1.04);}
+  .product .read-story{display:inline-block; margin-top:8px; font-size:11.5px; letter-spacing:.08em; color:var(--gold); border-bottom:1px solid transparent; cursor:pointer;}
+  .product .read-story:hover{border-color:var(--gold);}
+  @media(hover:none){ .product .story-hint{display:none;} }
+
+  .pm-overlay{position:fixed; inset:0; background:rgba(0,0,0,.72); backdrop-filter:blur(3px); z-index:110; display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .25s;}
+  .pm-overlay.open{opacity:1; pointer-events:auto;}
+  .pm{position:relative; background:var(--cream); border:1px solid var(--line); width:min(980px,100%); max-height:calc(100vh - 48px); overflow:auto; display:grid; grid-template-columns:1fr 1.1fr; transform:translateY(16px) scale(.98); transition:transform .3s ease; box-shadow:0 30px 80px rgba(0,0,0,.6);}
+  .pm-overlay.open .pm{transform:none;}
+  .pm-close{position:absolute; top:12px; right:12px; z-index:3; width:38px; height:38px; border-radius:50%; background:var(--card); border:1px solid var(--line); color:var(--ink); font-size:18px; cursor:pointer;}
+  .pm-close:hover{border-color:var(--gold); color:var(--gold);}
+  .pm-img{background:var(--panel); display:flex; align-items:center; justify-content:center; min-height:100%; position:relative;}
+  .pm-img img{width:100%; height:100%; object-fit:cover; display:block;}
+  .pm-body{padding:38px 36px 32px; display:flex; flex-direction:column; gap:16px;}
+  .pm-brand{font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold);}
+  .pm-name{font-size:38px; line-height:1.08; margin-top:-8px;}
+  .pm-tagline{font-family:'Cormorant Garamond',serif; font-style:italic; font-size:20px; color:var(--ink-soft);}
+  .pm-price{font-size:20px; font-weight:500;}
+  .pm-h{font-size:11.5px; letter-spacing:.16em; color:var(--gold); text-transform:uppercase; margin-bottom:6px;}
+  .pm-story p{font-size:14.5px; line-height:1.75; color:var(--ink);}
+  .pm-story p+p{margin-top:10px;}
+  .pm-notes{display:flex; flex-wrap:wrap; gap:8px;}
+  .pm-notes span{border:1px solid var(--line); background:var(--card); padding:6px 12px; font-size:12.5px; border-radius:30px;}
+  .pm-facts{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+  .pm-facts div{border:1px solid var(--line); background:var(--card); padding:10px 12px;}
+  .pm-facts b{display:block; font-size:10.5px; letter-spacing:.14em; color:var(--gold); font-weight:500; margin-bottom:3px;}
+  .pm-facts span{font-size:13px;}
+  .pm-actions{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px;}
+  .pm-add{background:var(--gold); color:#171410; border:none; padding:14px; font:500 13px 'Jost',sans-serif; letter-spacing:.1em; cursor:pointer;}
+  .pm-add:hover{background:#e3c07e;}
+  .pm-ask{display:flex; align-items:center; justify-content:center; background:transparent; color:var(--ink); border:1px solid #25D366; padding:14px; font-size:13px; letter-spacing:.06em;}
+  .pm-ask:hover{background:#25D366; color:#fff;}
+  .pm-nav{display:flex; justify-content:space-between; border-top:1px solid var(--line); padding-top:14px; font-size:12.5px; color:var(--ink-soft);}
+  .pm-nav button{background:none; border:none; color:var(--ink-soft); font:inherit; cursor:pointer; letter-spacing:.06em;}
+  .pm-nav button:hover{color:var(--gold);}
+  body.pm-lock{overflow:hidden;}
+  @media(max-width:780px){
+    .pm-overlay{padding:0; align-items:flex-end;}
+    .pm{grid-template-columns:1fr; max-height:92vh; border-bottom:none;}
+    .pm-img{height:40vh; min-height:0; aspect-ratio:auto; overflow:hidden; background:#fff;}
+    .pm-img img{object-fit:contain;}
+    .pm-facts div{padding:8px 9px;} .pm-facts b{font-size:9.5px; letter-spacing:.08em;} .pm-facts span{font-size:12px;}
+    .pm-actions{grid-template-columns:1fr;}
+    .pm-body{padding:24px 20px calc(24px + env(safe-area-inset-bottom,0px));}
+    .pm-name{font-size:30px;}
+    .pm-facts{grid-template-columns:1fr 1fr 1fr;}
+  }
+
+  /* ---- icon buttons in nav ---- */
+  .icon-btn{position:relative; background:none; border:none; color:var(--ink); font-size:19px; cursor:pointer; width:40px; height:40px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%;}
+  .icon-btn:hover{color:var(--gold); background:var(--card);}
+  .icon-btn svg{width:21px; height:21px; stroke:currentColor; fill:none; stroke-width:1.7;}
+  .icon-btn .badge{top:0; right:-2px;}
+  .icon-btn .badge.zero{display:none;}
+  .navicons{gap:10px;}
+  .burger{display:none;}
+  .navlinks a:hover{color:var(--gold);}
+
+  /* ---- phone menu ---- */
+  .menu-ov{position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:95; opacity:0; pointer-events:none; transition:opacity .25s;}
+  .menu-ov.open{opacity:1; pointer-events:auto;}
+  .menu{position:fixed; top:0; left:0; bottom:0; width:min(320px,86vw); background:var(--cream); border-right:1px solid var(--line); z-index:96; transform:translateX(-100%); transition:transform .3s ease; display:flex; flex-direction:column; padding-top:env(safe-area-inset-top,0px); overflow-y:auto; visibility:hidden;}
+  .menu.open{transform:none; visibility:visible;}
+  .menu-head{display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--line);}
+  .menu-head img{height:56px;}
+  :root[data-theme="light"] .menu-head img{background:#050505; border-radius:8px; padding:2px 6px;}
+  .menu-close{background:none; border:1px solid var(--line); color:var(--ink); width:38px; height:38px; border-radius:50%; font-size:16px; cursor:pointer;}
+  .menu .mlinks{display:flex; flex-direction:column; padding:4px 0;}
+  .menu .mlinks a{padding:14px 22px; font-size:16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;}
+  .menu .mlinks a::after{content:"\203A"; color:var(--gold); font-size:20px;}
+  .menu .mlinks a:hover,.menu .mlinks a:active{background:var(--card); color:var(--gold);}
+  .menu .msec{font-size:11px; letter-spacing:.16em; color:var(--gold); padding:18px 22px 6px;}
+  .menu .mwa{margin:20px 18px calc(24px + env(safe-area-inset-bottom,0px)); display:flex; align-items:center; justify-content:center; gap:10px; background:#25D366; color:#fff; padding:13px; font-size:14px; font-weight:500;}
+  body.menu-open{overflow:hidden;}
+  body.menu-open .wa-float{opacity:0; pointer-events:none;}
+
+  /* ---- search in shop ---- */
+  .shop-tools{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:26px;}
+  .shop-tools .tabs{margin-bottom:0; flex:1;}
+  .search{position:relative; width:min(300px,100%);}
+  .search input{width:100%; background:var(--card); border:1px solid var(--line); color:var(--ink); padding:10px 36px 10px 38px; font:14px 'Jost',sans-serif; border-radius:30px;}
+  .search input:focus{outline:none; border-color:var(--gold);}
+  .search svg{position:absolute; left:13px; top:50%; transform:translateY(-50%); width:17px; height:17px; stroke:var(--ink-soft); fill:none; stroke-width:1.8; pointer-events:none;}
+  .search .clr{position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--ink-soft); font-size:15px; cursor:pointer; display:none; width:26px; height:26px;}
+  .search.has .clr{display:block;}
+  .search input::-webkit-search-cancel-button{display:none;}
+
+  /* ---- wishlist hearts ---- */
+  .product .heart{cursor:pointer; width:34px; height:34px; top:6px; right:6px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:none; background:rgba(5,5,5,.55); color:#fff; font-size:18px; transition:transform .15s, color .15s;}
+  .product .heart:hover{transform:scale(1.12); color:var(--gold);}
+  .product .heart.on{color:#e0645a;}
+  :root[data-theme="light"] .product .heart{background:rgba(255,255,255,.85); color:#1c1a17;}
+  :root[data-theme="light"] .product .heart.on{color:#d0453a;}
+  .pm-save{background:none; border:1px solid var(--line); color:var(--ink); padding:7px 14px; font:13px 'Jost',sans-serif; cursor:pointer; border-radius:30px; align-self:flex-start;}
+  .pm-save.on{color:#e0645a; border-color:#e0645a;}
+  .tab.saved-tab.hide{display:none;}
+
+  /* ---- about & contact ---- */
+  .info-sec{padding:70px 32px; border-top:1px solid var(--line);}
+  .info-sec .wrap{padding:0;}
+  .sec-k{font-size:12px; letter-spacing:.16em; color:var(--gold); margin-bottom:8px;}
+  .info-sec h2{font-size:36px; margin-bottom:14px;}
+  .about-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:start;}
+  .about-grid p{color:var(--ink-soft); line-height:1.75; font-size:15.5px;}
+  .about-grid p+p{margin-top:12px;}
+  .pillars{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .pillar{background:var(--card); border:1px solid var(--line); padding:20px;}
+  .pillar .i{font-size:24px; margin-bottom:8px;}
+  .pillar b{display:block; font-weight:500; margin-bottom:4px;}
+  .pillar span{font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
+  .contact-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:24px;}
+  .ccard{background:var(--card); border:1px solid var(--line); padding:22px; display:flex; flex-direction:column; gap:6px; transition:border-color .2s;}
+  a.ccard:hover{border-color:var(--gold);}
+  .ccard .i{font-size:22px;}
+  .ccard b{font-weight:500; font-size:15px;}
+  .ccard span{font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
+  .ccard .go{color:var(--gold); font-size:13px; margin-top:4px;}
+  footer.foot{background:var(--surface); border-top:1px solid var(--line); color:var(--ink-soft); font-size:13px; text-align:left; padding:0;}
+  .foot .wrap{display:flex; flex-wrap:wrap; justify-content:space-between; gap:14px; padding:26px 32px 92px;}
+  .foot a:hover{color:var(--gold);}
+  .foot .fl{display:flex; flex-wrap:wrap; gap:18px;}
+
+  @media(max-width:980px){
+    .burger{display:inline-flex;}
+    nav .wrap{padding-left:12px; padding-right:12px;}
+    .logo{margin-right:auto; margin-left:4px;}
+    .logo img{height:62px;}
+    .navicons{gap:0;}
+    .about-grid{grid-template-columns:1fr; gap:28px;}
+    .search{width:100%;}
+  }
+  @media(max-width:600px){
+    .theme-toggle{width:36px; height:36px; margin-right:2px;}
+    .info-sec{padding:52px 18px;}
+    .info-sec h2{font-size:30px;}
+    .pillars{gap:10px;}
+    .pillar{padding:14px;}
+    .foot .wrap{padding:22px 18px 92px; flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="wrap">
+  <span>🚚 Free Delivery on Orders Over KES 6,500</span>
+  <span>🛡 100% Authentic Products</span>
+  <span>🎧 24/7 Customer Support</span>
+</div></div>
+
+<nav><div class="wrap">
+  <button class="icon-btn burger" id="menuOpen" type="button" aria-label="Open menu" aria-controls="menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="logo" href="#" aria-label="Ziyaan Elite — Original Designer Perfumes"><img src="images/logo.png" alt="Ziyaan Elite — Original Designer Perfumes" width="116" height="84"></a>
+  <div class="navlinks">
+    <a href="#" class="active">Home</a>
+    <a href="#shop" data-filter="all">Shop</a>
+    <a href="#shop" data-filter="niche">Niche</a>
+    <a href="#shop" data-filter="designer">Designer</a>
+    <a href="#shop" data-filter="oud">Oud</a>
+    <a href="#shop" data-filter="arabian">Arabian</a>
+    <a href="#about">About Us</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="navicons">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light / dark theme" title="Toggle theme">
+      <span class="tt-icon tt-moon">🌙</span><span class="tt-icon tt-sun">☀️</span>
+    </button>
+    <button class="icon-btn" id="searchOpen" type="button" aria-label="Search fragrances" title="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+    <button class="icon-btn" id="savedOpen" type="button" aria-label="Saved fragrances" title="Saved"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.6-9.1C1 8.3 2.9 4.8 6.4 4.8c2.1 0 3.6 1.2 4.4 2.6h2.4c.8-1.4 2.3-2.6 4.4-2.6 3.5 0 5.4 3.5 4 6.6-2.1 4.5-9.6 9.1-9.6 9.1z"/></svg><span class="badge zero" id="savedCount">0</span></button>
+    <button class="cart-btn" id="cartOpen" aria-label="Open cart">🛒<span class="badge" id="cartCount">0</span></button>
+  </div>
+</div></nav>
+
+<div class="menu-ov" id="menuOv"></div>
+<aside class="menu" id="menu" aria-label="Menu" aria-hidden="true">
+  <div class="menu-head"><img src="images/logo.png" alt="Ziyaan Elite"><button class="menu-close" id="menuClose" type="button" aria-label="Close menu">✕</button></div>
+  <div class="mlinks">
+    <div class="msec">SHOP</div>
+    <a href="#shop" data-filter="all">All Fragrances</a>
+    <a href="#shop" data-filter="niche">Niche</a>
+    <a href="#shop" data-filter="designer">Designer</a>
+    <a href="#shop" data-filter="oud">Oud Collection</a>
+    <a href="#shop" data-filter="arabian">Arabian</a>
+    <a href="#shop" data-filter="best">Best Sellers</a>
+    <a href="#shop" data-filter="saved">Saved ♥</a>
+    <div class="msec">ZIYAAN ELITE</div>
+    <a href="#about">About Us</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a class="mwa" id="menuWa" href="#" target="_blank" rel="noopener">Chat with us on WhatsApp</a>
+</aside>
+
+<section class="hero">
+  <svg class="petals" viewBox="0 0 1240 560" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="streak" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:var(--gold)" stop-opacity="0"/>
+        <stop offset="50%" style="stop-color:var(--gold)" stop-opacity="0.9"/>
+        <stop offset="100%" style="stop-color:var(--gold)" stop-opacity="0"/>
+      </linearGradient>
+      <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="60%" style="stop-color:var(--gold)" stop-opacity="0"/>
+        <stop offset="100%" style="stop-color:var(--gold)" stop-opacity="0.12"/>
+      </radialGradient>
+      <pattern id="dotgrid" width="16" height="16" patternUnits="userSpaceOnUse">
+        <circle cx="1.4" cy="1.4" r="1.4" style="fill:var(--gold)" opacity="0.35"/>
+      </pattern>
+    </defs>
+    <!-- dot grid, lower-right corner -->
+    <rect x="980" y="340" width="260" height="220" fill="url(#dotgrid)" opacity="0.5"/>
+    <!-- small floating gold dots -->
+    <circle cx="1180" cy="70" r="5" style="fill:var(--gold)" opacity="0.7"/>
+    <circle cx="1140" cy="470" r="4" style="fill:var(--gold)" opacity="0.5"/>
+    <circle cx="60" cy="70" r="3" style="fill:var(--gold)" opacity="0.5"/>
+  </svg>
+  <div class="wrap">
+  <div>
+    <div class="eyebrow">PREMIUM FRAGRANCES</div>
+    <h1>We Don’t Just Sell Fragrances,<br>We Build <em>Collections!</em></h1>
+    <p>Discover niche, designer and oud fragrances that keep you confident, fresh and unforgettable — all day.</p>
+    <a class="btn" href="#shop" data-filter="all">SHOP NOW →</a>
+    <div class="dots" id="dots"></div>
+  </div>
+  <div class="hero-art">
+    <div class="slider" id="slider" aria-label="Featured fragrances">
+      <div class="slides" id="slides"></div>
+      <div class="slide-cap" id="slideCap"></div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section class="cats"><div class="wrap">
+  <div class="cat" data-filter="niche"><div class="icon">💎</div><h3>Niche Fragrances</h3><a class="shop" href="#shop" data-filter="niche">SHOP NOW →</a></div>
+  <div class="cat" data-filter="designer"><div class="icon">👑</div><h3>Designer Fragrances</h3><a class="shop" href="#shop" data-filter="designer">SHOP NOW →</a></div>
+  <div class="cat" data-filter="oud"><div class="icon">🪵</div><h3>Oud Collection</h3><a class="shop" href="#shop" data-filter="oud">SHOP NOW →</a></div>
+  <div class="cat" data-filter="arabian"><div class="icon">🕌</div><h3>Arabian Fragrances</h3><a class="shop" href="#shop" data-filter="arabian">SHOP NOW →</a></div>
+  <div class="cat" data-filter="best"><div class="icon">⭐</div><h3>Best Sellers</h3><a class="shop" href="#shop" data-filter="best">SHOP NOW →</a></div>
+</div></section>
+
+<section class="best" id="shop"><div class="wrap" style="padding:0;">
+  <div class="best-head">
+    <div><div class="k" id="shopK">SHOP</div><h2 id="shopH">All Fragrances</h2><p class="shop-desc" id="shopD"></p></div>
+    <a class="viewall" href="#shop" data-filter="all">View All →</a>
+  </div>
+  <div class="shop-tools">
+  <div class="search" id="searchBox"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="searchInput" placeholder="Search brand, name or note…" aria-label="Search fragrances" autocomplete="off"><button class="clr" id="searchClear" type="button" aria-label="Clear search">✕</button></div>
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-filter="all">All</button>
+    <button class="tab" data-filter="designer">Designer</button>
+    <button class="tab" data-filter="niche">Niche</button>
+    <button class="tab" data-filter="arabian">Arabian</button>
+    <button class="tab" data-filter="oud">Oud</button>
+    <button class="tab" data-filter="best">Best Sellers</button>
+    <button class="tab saved-tab hide" data-filter="saved">Saved ♥</button>
+  </div>
+  </div>
+  <div class="grid" id="grid"></div>
+</div></section>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Shopping cart">
+  <header><h3>Your Cart</h3><button class="close" id="cartClose" aria-label="Close cart">✕</button></header>
+  <div class="cart-items" id="cartItems"></div>
+  <footer>
+    <div class="total"><span>Total</span><strong id="cartTotal">KES 0</strong></div>
+    <div class="mpesa-panel" id="mpesaPanel">
+      <strong>Pay with M-Pesa (Send Money)</strong>
+      <ol>
+        <li>Open M-Pesa → <b>Send Money</b></li>
+        <li>Number:</li>
+      </ol>
+      <div class="num"><span id="mpesaNum">0720 081 710</span><button type="button" id="copyNum">COPY</button></div>
+      <ol start="3">
+        <li>Amount: <b id="mpesaAmt">KES 0</b></li>
+        <li>Enter your PIN, then paste the M-Pesa confirmation code below</li>
+      </ol>
+      <input id="mpesaCode" placeholder="M-Pesa code e.g. SJK3L9XXXX" maxlength="12" autocomplete="off">
+      <a class="checkout disabled" id="mpesaConfirm" href="#" target="_blank" rel="noopener">CONFIRM PAYMENT ON WHATSAPP</a>
+    </div>
+    <button class="mpesa-btn" id="mpesaToggle" type="button" disabled>PAY WITH M-PESA</button>
+    <a class="checkout disabled" id="checkout" href="#" target="_blank" rel="noopener">ORDER ON WHATSAPP (PAY ON DELIVERY)</a>
+  </footer>
+</aside>
+<div class="pm-overlay" id="pmOverlay" aria-hidden="true">
+  <div class="pm" role="dialog" aria-modal="true" aria-labelledby="pmName">
+    <button class="pm-close" id="pmClose" aria-label="Close">✕</button>
+    <div class="pm-img" id="pmImg"></div>
+    <div class="pm-body">
+      <div>
+        <div class="pm-brand" id="pmBrand"></div>
+      </div>
+      <h2 class="pm-name" id="pmName"></h2>
+      <div class="pm-tagline" id="pmTag"></div>
+      <div class="pm-price" id="pmPrice"></div>
+      <button class="pm-save" id="pmSave" type="button">♡ Save</button>
+      <div class="pm-stock" id="pmStock"></div>
+      <div class="pm-story"><div class="pm-h">The Story</div><div id="pmStory"></div></div>
+      <div id="pmNotesWrap"><div class="pm-h">Key Notes</div><div class="pm-notes" id="pmNotes"></div></div>
+      <div class="pm-facts" id="pmFacts"></div>
+      <div class="pm-actions">
+        <button class="pm-add" id="pmAdd" type="button">ADD TO CART</button>
+        <a class="pm-ask" id="pmAsk" href="#" target="_blank" rel="noopener">ASK ON WHATSAPP</a>
+      </div>
+      <div class="pm-nav"><button id="pmPrev" type="button">← Previous</button><button id="pmNext" type="button">Next →</button></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<a class="wa-float" aria-label="Chat with us on WhatsApp" title="Chat with us on WhatsApp" href="https://wa.me/254720081710?text=Hello%20Ziyaan%20Elite%2C%20I%27d%20like%20to%20enquire%20about%20your%20fragrances." target="_blank" rel="noopener">
+  <span class="bubble"><svg viewBox="0 0 32 32"><path d="M16.02 3C9.38 3 4 8.36 4 15c0 2.36.66 4.55 1.8 6.42L4 29l7.77-1.75A11.9 11.9 0 0 0 16.02 27C22.65 27 28 21.64 28 15S22.65 3 16.02 3zm0 21.7c-2 0-3.86-.58-5.43-1.58l-.39-.24-4.36.98.94-4.28-.26-.42A9.6 9.6 0 0 1 6.3 15c0-5.37 4.36-9.7 9.72-9.7 5.36 0 9.72 4.33 9.72 9.7 0 5.37-4.36 9.7-9.72 9.7zm5.34-7.26c-.29-.15-1.73-.86-2-.96-.27-.1-.46-.15-.66.15-.2.29-.76.95-.93 1.15-.17.2-.34.22-.63.07-.29-.15-1.22-.45-2.32-1.44-.86-.77-1.44-1.71-1.61-2-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.07-.15-.66-1.6-.9-2.2-.24-.57-.48-.5-.66-.5h-.56c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.44s1.05 2.83 1.2 3.03c.15.2 2.06 3.15 5 4.42.7.3 1.24.48 1.67.62.7.22 1.34.19 1.84.12.56-.08 1.73-.71 1.97-1.39.24-.68.24-1.27.17-1.39-.07-.12-.26-.2-.55-.35z"/></svg></span>
+  <span class="txt">
+    <span class="label">Chat with us on</span>
+    <span class="name">WhatsApp ›</span>
+    <span class="sub">Get quick answers &amp; support</span>
+  </span>
+</a>
+
+<section class="info-sec" id="about"><div class="wrap">
+  <div class="about-grid">
+    <div>
+      <div class="sec-k">ABOUT US</div>
+      <h2>Original fragrances, chosen with care</h2>
+      <p>Ziyaan Elite brings together niche, designer and oud fragrances for people who see scent as part of who they are. Whether you are looking for your first signature perfume or adding to a collection, we help you find something that fits you.</p>
+      <p>Every bottle we sell is 100% authentic. Not sure what to pick? Message us on WhatsApp, tell us what you like, and we will recommend a few sprays to try.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><div class="i">🛡</div><b>100% authentic</b><span>Original perfumes only.</span></div>
+      <div class="pillar"><div class="i">💬</div><b>Personal advice</b><span>Help choosing a scent on WhatsApp.</span></div>
+      <div class="pillar"><div class="i">🚚</div><b>Delivery</b><span>Free on orders over KES 6,500.</span></div>
+      <div class="pillar"><div class="i">📱</div><b>Easy payment</b><span>M-Pesa or pay on delivery.</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="info-sec" id="contact"><div class="wrap">
+  <div class="sec-k">CONTACT</div>
+  <h2>Talk to us</h2>
+  <p style="color:var(--ink-soft);max-width:60ch;line-height:1.7">Questions about a fragrance, stock or delivery? We reply fastest on WhatsApp.</p>
+  <div class="contact-grid" id="contactGrid"></div>
+</div></section>
+
+<footer class="foot"><div class="wrap">
+  <span>© <span id="yr">2026</span> Ziyaan Elite — Niche · Designer · Oud</span>
+  <div class="fl"><a href="#shop" data-filter="all">Shop</a><a href="#about">About Us</a><a href="#contact">Contact</a></div>
+</div></footer>
+
+<script src="config.js"></script>
+<script src="starter-products.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  var CFG=window.ZIYAAN_CONFIG||{};
+  var PHONE=CFG.whatsapp||'254720081710', CART_KEY='ziyaan-cart', CART_DAYS=14;
+  function loadCart(){
+    try{ var raw=JSON.parse(localStorage.getItem(CART_KEY)||'null');
+      if(raw&&raw.items&&typeof raw.items==='object'&&Date.now()-(raw.t||0)<CART_DAYS*864e5) return raw.items; }catch(e){}
+    return {};
+  }
+  function saveCart(){ try{ if(Object.keys(cart).length) localStorage.setItem(CART_KEY,JSON.stringify({t:Date.now(),items:cart})); else localStorage.removeItem(CART_KEY); }catch(e){} }
+  var cart=loadCart();
+  var SAVED_KEY='ziyaan-saved', saved=[];
+  try{ saved=JSON.parse(localStorage.getItem(SAVED_KEY)||'[]'); if(!Array.isArray(saved)) saved=[]; }catch(e){ saved=[]; }
+  function keyOf(p){return p.brand+' '+p.name}
+  function isSaved(p){return saved.indexOf(keyOf(p))>=0}
+  function persistSaved(){ try{ localStorage.setItem(SAVED_KEY,JSON.stringify(saved)); }catch(e){} }
+  var searchQ='';
+  var $=function(id){return document.getElementById(id)};
+  var drawer=$('drawer'), overlay=$('overlay');
+  function money(n){return 'KES '+Math.round(n).toLocaleString('en-KE')}
+  function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function toast(t){var e=$('toast'); e.textContent=t; e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(function(){e.classList.remove('show')},1600)}
+  function openCart(o){drawer.classList.toggle('open',o); overlay.classList.toggle('open',o); document.body.classList.toggle('cart-open',o)}
+  if(CFG.mpesaNumber) $('mpesaNum').textContent=CFG.mpesaNumber;
+
+  /* ---------- cart ---------- */
+  function updateConfirm(){
+    var code=($('mpesaCode').value||'').trim().toUpperCase(), a=$('mpesaConfirm');
+    var msg='Hello Ziyaan Elite, I have paid via M-Pesa.\nM-Pesa code: '+(code||'(pending)')+'\nOrder:\n'+(window._order||'');
+    a.href='https://wa.me/'+PHONE+'?text='+encodeURIComponent(msg);
+    a.classList.toggle('disabled',code.length<8||!Object.keys(cart).length);
+  }
+  function render(){
+    var keys=Object.keys(cart), count=0, total=0, html='';
+    keys.forEach(function(k){var it=cart[k]; count+=it.q; total+=it.q*it.p;
+      html+='<div class="ci"><div><div class="n">'+esc(it.n)+'</div><div class="p">'+money(it.p)+'</div></div><div class="qty"><button data-a="-" data-k="'+esc(k)+'">−</button><span>'+it.q+'</span><button data-a="+" data-k="'+esc(k)+'">+</button></div></div>'});
+    $('cartItems').innerHTML=html||'<p class="cart-empty">Your cart is empty.<br>Select a spray and tap Add to Cart.</p>';
+    $('cartCount').textContent=count; $('cartTotal').textContent=money(total);
+    var msg='Hello Ziyaan Elite, I would like to order:\n'+keys.map(function(k){var i=cart[k];return '- '+i.n+' x'+i.q+' ('+money(i.q*i.p)+')'}).join('\n')+'\nTotal: '+money(total);
+    var kesTxt=money(total);
+    $('mpesaAmt').textContent=kesTxt;
+    $('mpesaToggle').disabled=!keys.length; if(!keys.length) $('mpesaPanel').classList.remove('open');
+    window._order=keys.map(function(k){var i=cart[k];return '- '+i.n+' x'+i.q}).join('\n')+'\nTotal: '+kesTxt;
+    updateConfirm();
+    var a=$('checkout'); a.href='https://wa.me/'+PHONE+'?text='+encodeURIComponent(msg); a.classList.toggle('disabled',!keys.length);
+    saveCart();
+  }
+  function addToCart(p){var name=p.brand+' '+p.name; if(isOut(p)){toast('Sorry, '+name+' is out of stock');return;} if(!cart[name]) cart[name]={n:name,p:p.price,q:0,max:p.stock}; if(p.stock!==null&&cart[name].q>=p.stock){toast('Only '+p.stock+' of '+name+' in stock');return;} cart[name].q++; render(); toast(name+' added to cart');}
+
+  /* ---------- catalogue ---------- */
+  var CATALOG=[];
+  var LABEL={designer:'Designer',niche:'Niche',arabian:'Arabian'};
+  var COPY={
+    all:['SHOP','All Fragrances','Browse the full Ziyaan Elite collection.'],
+    designer:['DESIGNER FRAGRANCES','Designer Fragrances','Iconic scents from major fashion and luxury houses.'],
+    niche:['NICHE FRAGRANCES','Niche Fragrances','Exclusive, specialist perfume houses focused purely on fragrance.'],
+    arabian:['ARABIAN FRAGRANCES','Arabian Fragrances','From everyday sprays to luxurious Arabian-house creations.'],
+    oud:['OUD COLLECTION','The Oud Collection','Rich, woody oud scents across Designer, Niche and Arabian houses.'],
+    best:['BEST SELLERS','Most Loved Fragrances','Our customers\u2019 favourites.'],
+    saved:['SAVED','Your Saved Fragrances','Tap the heart on any spray to save it here.'],
+    search:['SEARCH','Search results','']
+  };
+  function isOut(p){return p.stock!==null&&p.stock<=0}
+  function isLow(p){return p.stock!==null&&p.stock>0&&p.stock<=p.low_stock_at}
+  function stockText(p){return isOut(p)?'Out of stock — ask us on WhatsApp':isLow(p)?'Only '+p.stock+' left':''}
+  function hue(t){var h=0;for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))%360;return h}
+  function bottle(t){return '<svg width="64" height="112" viewBox="0 0 64 112" aria-hidden="true"><rect x="22" y="4" width="20" height="16" fill="#d4af6a"/><rect x="27" y="20" width="10" height="8" fill="#8a6d3a"/><rect x="6" y="28" width="52" height="78" rx="8" fill="hsl('+hue(t)+',38%,46%)"/><rect x="14" y="52" width="36" height="30" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.2"/></svg>'}
+  function imgTag(p,lazy){return p.image_url?'<img src="'+esc(p.image_url)+'" alt="'+esc(p.brand+' '+p.name)+'"'+(lazy?' loading="lazy"':'')+'>':bottle(p.brand+p.name)}
+  function normalise(list){
+    return (list||[]).filter(function(p){return p&&p.active!==false&&p.name}).map(function(p){
+      var notes=Array.isArray(p.notes)?p.notes:String(p.notes||'').split(',');
+      return {id:p.id, brand:p.brand||'', name:p.name, category:LABEL[p.category]?p.category:'designer',
+        is_oud:!!p.is_oud, is_best:!!p.is_best, featured:!!p.featured, price:+p.price||0,
+        tagline:p.tagline||'', story:p.story||'', notes:notes.map(function(n){return String(n).trim()}).filter(Boolean),
+        occasion:p.occasion||'', season:p.season||'', performance:p.performance||'',
+        image_url:p.image_url||'', hero_image_url:p.hero_image_url||'', sort_order:p.sort_order==null?100:+p.sort_order,
+        stock:(p.stock==null||p.stock==='')?null:Math.max(0,+p.stock||0), low_stock_at:p.low_stock_at==null?3:+p.low_stock_at};
+    }).sort(function(a,b){return a.sort_order-b.sort_order||a.name.localeCompare(b.name)})
+      .map(function(p,i){p.i=i; return p});
+  }
+  function norm(t){return String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+  function matchesSearch(p,q){
+    var hay=norm([p.brand,p.name,LABEL[p.category],p.is_oud?'oud':'',p.tagline,(p.notes||[]).join(' ')].join(' '));
+    return norm(q).split(/\s+/).filter(Boolean).every(function(w){return hay.indexOf(w)>=0});
+  }
+  function pick(f){return CATALOG.filter(function(p){
+    if(f==='search') return matchesSearch(p,searchQ);
+    if(f==='saved') return isSaved(p);
+    if(f==='all') return true; if(f==='best') return p.is_best; if(f==='oud') return p.is_oud; return p.category===f})}
+  function renderGrid(f){
+    if(!CATALOG.length){ $('grid').innerHTML='<p class="empty">Loading fragrances…</p>'; return; }
+    var items=pick(f);
+    $('grid').innerHTML=items.map(function(p){
+      var tag=isOut(p)?'<span class="tag sold">Sold out</span>':p.is_best?'<span class="tag">Bestseller</span>':(p.is_oud?'<span class="tag new">Oud</span>':'');
+      var st=stockText(p);
+      return '<div class="product'+(isOut(p)?' soldout':'')+'" data-i="'+p.i+'" tabindex="0" role="button" aria-label="'+esc(p.brand+' '+p.name)+' — view story">'+tag+'<button type="button" class="heart'+(isSaved(p)?' on':'')+'" aria-pressed="'+isSaved(p)+'" aria-label="'+(isSaved(p)?'Remove from saved':'Save')+' '+esc(p.brand+' '+p.name)+'">'+(isSaved(p)?'♥':'♡')+'</button><div class="imgbox">'+imgTag(p,true)+'<span class="story-hint">VIEW STORY</span></div><div class="info"><div class="brand">'+esc(p.brand)+' · '+LABEL[p.category]+'</div><div class="name">'+esc(p.name)+'</div><div class="price">'+money(p.price)+'</div>'+(st?'<div class="stock-note'+(isOut(p)?' out':'')+'">'+(isOut(p)?'Out of stock':st)+'</div>':'')+'<span class="read-story">Read the story →</span><button class="add-btn" type="button"'+(isOut(p)?' disabled':'')+'>'+(isOut(p)?'OUT OF STOCK':'ADD TO CART')+'</button></div></div>';
+    }).join('')||'<p class="empty">'+(f==='search'?'No fragrances match \u201c'+esc(searchQ)+'\u201d. Try a brand like Dior, or a note like vanilla \u2014 or ask us on WhatsApp.':f==='saved'?'Nothing saved yet. Tap the \u2661 on any spray to save it here.':'New arrivals coming soon \u2014 message us on WhatsApp to ask what is available.')+'</p>';
+  }
+  var curFilter='all';
+  function setFilter(f,scroll){
+    if(!COPY[f]) f='all'; curFilter=f;
+    if(f!=='search'&&searchQ){ searchQ=''; $('searchInput').value=''; $('searchBox').classList.remove('has'); }
+    var nRes=f==='search'?pick('search').length:0;
+    $('shopK').textContent=COPY[f][0]; $('shopH').textContent=f==='search'?'Results for \u201c'+searchQ+'\u201d':COPY[f][1];
+    $('shopD').textContent=f==='search'?nRes+' fragrance'+(nRes===1?'':'s')+' found':COPY[f][2];
+    if(typeof paintSavedCount==='function') paintSavedCount();
+    document.querySelectorAll('.tab,.cat').forEach(function(e){e.classList.toggle('active',e.dataset.filter===f)});
+    renderGrid(f);
+    if(scroll) $('shop').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-filter]'); if(!t) return;
+    e.preventDefault(); setFilter(t.dataset.filter,true);
+  });
+
+  /* ---------- story popup ---------- */
+  var FACT=['OCCASION','SEASON','PERFORMANCE'], pmCur=-1;
+  function openStory(i){
+    var p=CATALOG[i]; if(!p) return; pmCur=i;
+    var paras=(p.story||'').split(/\n\s*\n/).map(function(x){return x.trim()}).filter(Boolean);
+    if(!paras.length) paras=['A refined fragrance from '+p.brand+'. Message us on WhatsApp to learn more about this scent.'];
+    $('pmImg').innerHTML=imgTag(p,false);
+    $('pmBrand').textContent=p.brand+' · '+LABEL[p.category]+(p.is_oud?' · Oud':'');
+    $('pmName').textContent=p.name; $('pmTag').textContent=p.tagline; $('pmTag').style.display=p.tagline?'':'none';
+    $('pmPrice').textContent=money(p.price);
+    $('pmStock').textContent=stockText(p); $('pmStock').className='pm-stock'+(isOut(p)?' out':''); $('pmStock').style.display=stockText(p)?'':'none';
+    paintSave(p);
+    $('pmAdd').disabled=isOut(p); $('pmAdd').textContent=isOut(p)?'OUT OF STOCK':'ADD TO CART';
+    $('pmStory').innerHTML=paras.map(function(x){return '<p>'+esc(x)+'</p>'}).join('');
+    $('pmNotes').innerHTML=p.notes.map(function(x){return '<span>'+esc(x)+'</span>'}).join('');
+    $('pmNotesWrap').style.display=p.notes.length?'':'none';
+    var facts=[p.occasion,p.season,p.performance];
+    $('pmFacts').innerHTML=facts.map(function(x,k){return x?'<div><b>'+FACT[k]+'</b><span>'+esc(x)+'</span></div>':''}).join('');
+    $('pmFacts').style.display=facts.some(Boolean)?'':'none';
+    $('pmAsk').href='https://wa.me/'+PHONE+'?text='+encodeURIComponent('Hello Ziyaan Elite, I’d like to know more about '+p.brand+' '+p.name+' ('+money(p.price)+'). Is it available?');
+    $('pmOverlay').classList.add('open'); $('pmOverlay').setAttribute('aria-hidden','false'); document.body.classList.add('pm-lock');
+    document.querySelector('.pm').scrollTop=0;
+  }
+  function closeStory(){ $('pmOverlay').classList.remove('open'); $('pmOverlay').setAttribute('aria-hidden','true'); document.body.classList.remove('pm-lock'); pmCur=-1; }
+  function stepStory(d){ if(pmCur<0||!CATALOG.length) return; openStory((pmCur+d+CATALOG.length)%CATALOG.length); }
+  $('pmClose').addEventListener('click',closeStory);
+  $('pmOverlay').addEventListener('click',function(e){ if(e.target===this) closeStory(); });
+  $('pmAdd').addEventListener('click',function(){ if(pmCur>=0) addToCart(CATALOG[pmCur]); });
+  $('pmPrev').addEventListener('click',function(){stepStory(-1)});
+  $('pmNext').addEventListener('click',function(){stepStory(1)});
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&$('menu').classList.contains('open')) openMenu(false); if(pmCur<0) return; if(e.key==='Escape') closeStory(); if(e.key==='ArrowRight') stepStory(1); if(e.key==='ArrowLeft') stepStory(-1); });
+
+  $('grid').addEventListener('keydown',function(e){ var c=e.target.closest('.product'); if(c&&e.target===c&&(e.key==='Enter'||e.key===' ')){e.preventDefault(); openStory(+c.dataset.i);} });
+  $('grid').addEventListener('click',function(e){
+    var card=e.target.closest('.product'); if(!card) return;
+    document.querySelectorAll('.product.selected').forEach(function(c){c.classList.remove('selected')});
+    card.classList.add('selected');
+    if(e.target.closest('.add-btn')){ addToCart(CATALOG[card.dataset.i]); return; }
+    if(e.target.closest('.heart')){ toggleSaved(CATALOG[card.dataset.i]); return; }
+    openStory(+card.dataset.i);
+  });
+
+  /* ---------- hero slider (sprays marked "featured") ---------- */
+  var slider={timer:null,cur:0,items:[]};
+  function buildSlider(){
+    var items=CATALOG.filter(function(p){return p.featured});
+    if(!items.length) items=CATALOG.slice(0,3);
+    items=items.slice(0,6); slider.items=items; slider.cur=0;
+    $('slides').innerHTML=items.map(function(p,i){return '<div class="slide'+(i?'':' on')+'"><img src="'+esc(p.hero_image_url||p.image_url)+'" alt="'+esc(p.brand+' '+p.name)+'"></div>'}).join('');
+    $('dots').innerHTML=items.length>1?items.map(function(_,i){return '<span'+(i?'':' class="on"')+'></span>'}).join(''):'';
+    $('dots').querySelectorAll('span').forEach(function(d,n){d.addEventListener('click',function(){showSlide(n);startSlider()})});
+    if(items.length){ showSlide(0); startSlider(); } else { $('slideCap').innerHTML=''; }
+  }
+  function showSlide(i){
+    var items=slider.items; if(!items.length) return;
+    slider.cur=(i+items.length)%items.length; var p=items[slider.cur];
+    $('slides').querySelectorAll('.slide').forEach(function(s,n){s.classList.toggle('on',n===slider.cur)});
+    $('dots').querySelectorAll('span').forEach(function(d,n){d.classList.toggle('on',n===slider.cur)});
+    $('slideCap').innerHTML='<div class="b">'+esc(p.brand)+'</div><div class="n">'+esc(p.name)+'</div><div class="p">'+money(p.price)+'</div>';
+  }
+  function startSlider(){stopSlider(); if(slider.items.length<2) return; if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return; slider.timer=setInterval(function(){showSlide(slider.cur+1)},4500)}
+  function stopSlider(){if(slider.timer){clearInterval(slider.timer);slider.timer=null}}
+  (function(){
+    var sl=$('slider');
+    sl.addEventListener('mouseenter',stopSlider); sl.addEventListener('mouseleave',startSlider);
+    sl.addEventListener('click',function(){var p=slider.items[slider.cur]; if(p) openStory(p.i)});
+    var x0=null;
+    sl.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+    sl.addEventListener('touchend',function(e){if(x0===null)return; var dx=e.changedTouches[0].clientX-x0; x0=null; if(Math.abs(dx)>40){showSlide(slider.cur+(dx<0?1:-1)); startSlider()}});
+  })();
+
+  /* ---------- load products ---------- */
+  function paintSave(p){ var on=isSaved(p), b=$('pmSave'); b.classList.toggle('on',on); b.textContent=on?'\u2665 Saved':'\u2661 Save'; b.setAttribute('aria-pressed',on); }
+  function paintSavedCount(){
+    var n=CATALOG.length?saved.filter(function(k){return CATALOG.some(function(p){return keyOf(p)===k})}).length:saved.length;
+    $('savedCount').textContent=n; $('savedCount').classList.toggle('zero',!n);
+    document.querySelectorAll('.saved-tab').forEach(function(t){t.classList.toggle('hide',!n&&curFilter!=='saved')});
+  }
+  function toggleSaved(p){
+    if(!p) return; var k=keyOf(p), i=saved.indexOf(k);
+    if(i>=0){ saved.splice(i,1); toast('Removed from saved'); } else { saved.push(k); toast('Saved \u2665 \u2014 find it under the heart icon'); }
+    persistSaved();
+    var y=window.scrollY; if(curFilter==='saved') setFilter('saved',false); else { renderGrid(curFilter); paintSavedCount(); } window.scrollTo(0,y);
+    if(pmCur>=0&&CATALOG[pmCur]===p) paintSave(p);
+  }
+  $('pmSave').addEventListener('click',function(){ if(pmCur>=0) toggleSaved(CATALOG[pmCur]); });
+  $('savedOpen').addEventListener('click',function(){ setFilter('saved',true); });
+  window.addEventListener('storage',function(e){ if(e.key===SAVED_KEY){ try{saved=JSON.parse(e.newValue||'[]')}catch(x){saved=[]} paintSavedCount(); renderGrid(curFilter); } });
+
+  /* phone menu */
+  function openMenu(o){ $('menu').classList.toggle('open',o); $('menuOv').classList.toggle('open',o); document.body.classList.toggle('menu-open',o); $('menu').setAttribute('aria-hidden',!o); $('menuOpen').setAttribute('aria-expanded',o); if(o) setTimeout(function(){$('menuClose').focus()},50); }
+  $('menuOpen').addEventListener('click',function(){openMenu(true)});
+  $('menuClose').addEventListener('click',function(){openMenu(false)});
+  $('menuOv').addEventListener('click',function(){openMenu(false)});
+  $('menu').addEventListener('click',function(e){ if(e.target.closest('a')) openMenu(false); });
+  $('menuWa').href='https://wa.me/'+PHONE+'?text='+encodeURIComponent('Hello Ziyaan Elite, I\u2019d like to enquire about your fragrances.');
+  window.addEventListener('resize',function(){ if(window.innerWidth>980&&$('menu').classList.contains('open')) openMenu(false); });
+
+  /* search */
+  var sTimer=null;
+  function runSearch(scroll){
+    searchQ=$('searchInput').value.trim(); $('searchBox').classList.toggle('has',!!searchQ);
+    if(searchQ) setFilter('search',scroll); else setFilter('all',false);
+  }
+  $('searchInput').addEventListener('input',function(){ clearTimeout(sTimer); sTimer=setTimeout(function(){runSearch(false)},150); });
+  $('searchInput').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); clearTimeout(sTimer); runSearch(true); this.blur(); } if(e.key==='Escape'){ this.value=''; runSearch(false); } });
+  $('searchClear').addEventListener('click',function(){ $('searchInput').value=''; runSearch(false); $('searchInput').focus(); });
+  $('searchOpen').addEventListener('click',function(){ $('shop').scrollIntoView({behavior:'smooth',block:'start'}); setTimeout(function(){ $('searchInput').focus({preventScroll:true}); },400); });
+
+  /* contact cards (details come from config.js) */
+  (function(){
+    var c=CFG, cards=[], shown=String(c.phone||c.mpesaNumber||''), tel=shown.replace(/[^0-9+]/g,'');
+    var telIntl=tel.charAt(0)==='0'?'+254'+tel.slice(1):tel;
+    function card(href,icon,title,text,go){ return (href?'<a class="ccard" href="'+esc(href)+'"'+(/^https?:/.test(href)?' target="_blank" rel="noopener"':'')+'>':'<div class="ccard">')+'<span class="i">'+icon+'</span><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(go?'<span class="go">'+esc(go)+' \u2192</span>':'')+(href?'</a>':'</div>'); }
+    var handle=function(h){return String(h).replace(/^@/,'')};
+    cards.push(card('https://wa.me/'+PHONE+'?text='+encodeURIComponent('Hello Ziyaan Elite, I\u2019d like to enquire about your fragrances.'),'💬','WhatsApp','Chat with us for orders, advice and stock questions.','Start chat'));
+    if(tel) cards.push(card('tel:'+telIntl,'📞','Call us',shown,'Call now'));
+    if(c.email) cards.push(card('mailto:'+c.email,'✉️','Email',c.email,'Send email'));
+    if(c.location) cards.push(card(c.mapsUrl||'','📍','Visit us',c.location,c.mapsUrl?'Open map':''));
+    if(c.hours) cards.push(card('','🕒','Opening hours',c.hours,''));
+    if(c.instagram) cards.push(card('https://instagram.com/'+handle(c.instagram),'📸','Instagram','@'+handle(c.instagram),'Follow us'));
+    if(c.tiktok) cards.push(card('https://www.tiktok.com/@'+handle(c.tiktok),'🎵','TikTok','@'+handle(c.tiktok),'Follow us'));
+    $('contactGrid').innerHTML=cards.join('');
+    $('yr').textContent=new Date().getFullYear();
+  })();
+
+  function syncCart(){
+    var changed=[];
+    Object.keys(cart).forEach(function(k){
+      var it=cart[k], p=CATALOG.filter(function(x){return x.brand+' '+x.name===k})[0];
+      if(!p||isOut(p)){ delete cart[k]; changed.push(k+(p?' is now out of stock':' is no longer available')); return; }
+      if(it.p!==p.price){ it.p=p.price; changed.push(k+' price updated'); }
+      it.max=p.stock;
+      if(p.stock!==null&&it.q>p.stock){ it.q=p.stock; changed.push('only '+p.stock+' of '+k+' left'); }
+    });
+    render();
+    if(changed.length) toast('Cart updated: '+changed[0]+(changed.length>1?' (+'+(changed.length-1)+' more)':''));
+  }
+  window.addEventListener('storage',function(e){ if(e.key===CART_KEY){ cart=loadCart(); if(CATALOG.length) syncCart(); else render(); } });
+  function useCatalog(list){ CATALOG=normalise(list); buildSlider(); setFilter(curFilter,false); syncCart(); paintSavedCount(); }
+  var h0=(location.hash||'').slice(1); setFilter(COPY[h0]?h0:'all',false);
+  function loadProducts(){
+    var fallback=window.ZIYAAN_STARTER||[];
+    if(!CFG.supabaseUrl||!CFG.supabaseAnonKey||!window.supabase){ useCatalog(fallback); return; }
+    try{
+      var db=window.supabase.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey,{auth:{persistSession:false}});
+      db.from('products').select('*').eq('active',true).order('sort_order',{ascending:true}).then(function(res){
+        if(res.error){ console.warn('Ziyaan: could not load products',res.error); useCatalog(fallback); return; }
+        useCatalog(res.data);
+      },function(err){ console.warn('Ziyaan: could not load products',err); useCatalog(fallback); });
+    }catch(err){ console.warn('Ziyaan:',err); useCatalog(fallback); }
+  }
+  loadProducts();
+
+  $('cartItems').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return; var it=cart[b.dataset.k]; if(!it) return;
+    if(b.dataset.a==='+'&&it.max!=null&&it.q>=it.max){toast('Only '+it.max+' in stock');return;} it.q+= b.dataset.a==='+'?1:-1; if(it.q<1) delete cart[b.dataset.k]; render();
+  });
+  $('mpesaToggle').addEventListener('click',function(){$('mpesaPanel').classList.toggle('open')});
+  $('mpesaCode').addEventListener('input',updateConfirm);
+  $('copyNum').addEventListener('click',function(){
+    var n=$('mpesaNum').textContent.replace(/\s/g,'');
+    try{navigator.clipboard.writeText(n).then(function(){toast('Number copied')},function(){toast('Number: '+n)})}catch(e){toast('Number: '+n)}
+  });
+  $('cartOpen').addEventListener('click',function(){openCart(true)});
+  $('cartClose').addEventListener('click',function(){openCart(false)});
+  overlay.addEventListener('click',function(){openCart(false)});
+  render();
+})();
+</script>
+<script>
+(function(){
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var saved = null;
+  try { saved = window.localStorage.getItem('ziyaan-theme'); } catch(e) {}
+  if (saved === 'light' || saved === 'dark') {
+    root.setAttribute('data-theme', saved);
+  }
+  btn.addEventListener('click', function(){
+    var isLight = root.getAttribute('data-theme') === 'light';
+    var next = isLight ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { window.localStorage.setItem('ziyaan-theme', next); } catch(e) {}
+  });
+})();
+</script>
+
+</body>
+</html>
