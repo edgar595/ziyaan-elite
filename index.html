@@ -566,7 +566,7 @@
 
 <script src="config.js"></script>
 <script src="starter-products.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="db.js"></script>
 <script>
 (function(){
   var CFG=window.ZIYAAN_CONFIG||{};
@@ -825,9 +825,9 @@
   var h0=(location.hash||'').slice(1); setFilter(COPY[h0]?h0:'all',false);
   function loadProducts(){
     var fallback=window.ZIYAAN_STARTER||[];
-    if(!CFG.supabaseUrl||!CFG.supabaseAnonKey||!window.supabase){ useCatalog(fallback); return; }
+    if(!CFG.supabaseUrl||!CFG.supabaseAnonKey||!window.ZiyaanDB){ useCatalog(fallback); return; }
     try{
-      var db=window.supabase.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey,{auth:{persistSession:false}});
+      var db=window.ZiyaanDB.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey,{auth:{persistSession:false}});
       db.from('products').select('*').eq('active',true).order('sort_order',{ascending:true}).then(function(res){
         if(res.error){ console.warn('Ziyaan: could not load products',res.error); useCatalog(fallback); return; }
         useCatalog(res.data);
