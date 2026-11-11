@@ -129,7 +129,21 @@
       }
     };
 
-    return { from: function (t) { return new Query(t); }, auth: auth, storage: storage };
+    /* ---------------- server functions & quick event logging ---------------- */
+    async function rpc(fn, args) {
+      var h = await headers({ 'Content-Type': 'application/json' });
+      try { return await parse(await fetch(URL_ + '/rest/v1/rpc/' + fn, { method: 'POST', headers: h, body: JSON.stringify(args || {}), cache: 'no-store' })); }
+      catch (e) { return { data: null, error: { message: 'Failed to fetch' } }; }
+    }
+    function logEvent(table, row) {
+      try {
+        fetch(URL_ + '/rest/v1/' + table, { method: 'POST', keepalive: true,
+          headers: { apikey: anonKey, Authorization: 'Bearer ' + anonKey, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+          body: JSON.stringify(row) }).catch(function () {});
+      } catch (e) {}
+    }
+
+    return { from: function (t) { return new Query(t); }, rpc: rpc, logEvent: logEvent, auth: auth, storage: storage };
   }
   window.ZiyaanDB = { createClient: createClient };
 })();
