@@ -571,6 +571,35 @@
 (function(){
   var CFG=window.ZIYAAN_CONFIG||{};
   var PHONE=CFG.whatsapp||'254720081710', CART_KEY='ziyaan-cart', CART_DAYS=14;
+
+  /* ---------- anonymous visitor tracker (counts shown on the admin page) ---------- */
+  var track=(function(){
+    function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){ return null; } }
+    function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v); }catch(e){ return null; } }
+    var off=!CFG.supabaseUrl||!CFG.supabaseAnonKey||!window.ZiyaanDB||/^(localhost|127\.0\.0\.1|)$/.test(location.hostname)||/[?&]notrack/.test(location.search);
+    if(/[?&]notrack/.test(location.search)) ls('ziyaan-notrack','1');
+    if(ls('ziyaan-notrack')==='1') off=true;
+    try{ for(var i=0;i<localStorage.length;i++){ if(String(localStorage.key(i)).indexOf('ziyaan-auth-')===0) off=true; } }catch(e){}   // admins browsing their own shop aren't counted
+    if(off) return function(){};
+    var db=window.ZiyaanDB.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey,{auth:{persistSession:false}});
+    var vid=ls('ziyaan-vid'); if(!vid||vid.length<6){ vid=Array.from({length:16},function(){return Math.floor(Math.random()*16).toString(16)}).join(''); ls('ziyaan-vid',vid); }
+    var ua=navigator.userAgent||'', device=/iPad|Tablet/i.test(ua)?'tablet':/Mobi|Android|iPhone/i.test(ua)?'phone':'computer';
+    var src=ss('ziyaan-src');
+    if(!src){
+      var q=location.search.match(/[?&](?:ref|utm_source)=([^&#]+)/i), ref='';
+      if(q) ref=decodeURIComponent(q[1]).toLowerCase();
+      else { try{ var h=new URL(document.referrer).hostname.replace(/^www\./,''); if(h&&h!==location.hostname) ref=h; }catch(e){} }
+      var map=[[/whatsapp|wa\.me/,'whatsapp'],[/instagram/,'instagram'],[/facebook|fb\.|messenger/,'facebook'],[/tiktok/,'tiktok'],[/google/,'google'],[/twitter|x\.com|t\.co$/,'x / twitter'],[/bing/,'bing']];
+      src=ref?ref.slice(0,40):'direct'; map.forEach(function(m){ if(m[0].test(ref)) src=m[1]; });
+      ss('ziyaan-src',src);
+    }
+    var seen={};
+    return function(event,product,detail){
+      var key=event+'|'+(product||'')+'|'+(detail||'');
+      if((event==='story_open'||event==='search')&&seen[key]) return; seen[key]=1;   // don't double count the same thing in one visit
+      db.logEvent('site_events',{visitor_id:vid,event:event,product:product?String(product).slice(0,160):null,detail:detail?String(detail).slice(0,160):null,source:src,device:device});
+    };
+  })();
   function loadCart(){
     try{ var raw=JSON.parse(localStorage.getItem(CART_KEY)||'null');
       if(raw&&raw.items&&typeof raw.items==='object'&&Date.now()-(raw.t||0)<CART_DAYS*864e5) return raw.items; }catch(e){}
@@ -614,7 +643,7 @@
     var a=$('checkout'); a.href='https://wa.me/'+PHONE+'?text='+encodeURIComponent(msg); a.classList.toggle('disabled',!keys.length);
     saveCart();
   }
-  function addToCart(p){var name=p.brand+' '+p.name; if(isOut(p)){toast('Sorry, '+name+' is out of stock');return;} if(!cart[name]) cart[name]={n:name,p:p.price,q:0,max:p.stock}; if(p.stock!==null&&cart[name].q>=p.stock){toast('Only '+p.stock+' of '+name+' in stock');return;} cart[name].q++; render(); toast(name+' added to cart');}
+  function addToCart(p){var name=p.brand+' '+p.name; if(isOut(p)){toast('Sorry, '+name+' is out of stock');return;} if(!cart[name]) cart[name]={n:name,p:p.price,q:0,max:p.stock}; if(p.stock!==null&&cart[name].q>=p.stock){toast('Only '+p.stock+' of '+name+' in stock');return;} cart[name].q++; render(); toast(name+' added to cart'); track('add_to_cart',name);}
 
   /* ---------- catalogue ---------- */
   var CATALOG=[];
@@ -685,7 +714,7 @@
   /* ---------- story popup ---------- */
   var FACT=['OCCASION','SEASON','PERFORMANCE'], pmCur=-1;
   function openStory(i){
-    var p=CATALOG[i]; if(!p) return; pmCur=i;
+    var p=CATALOG[i]; if(!p) return; pmCur=i; track('story_open',p.brand+' '+p.name);
     var paras=(p.story||'').split(/\n\s*\n/).map(function(x){return x.trim()}).filter(Boolean);
     if(!paras.length) paras=['A refined fragrance from '+p.brand+'. Message us on WhatsApp to learn more about this scent.'];
     $('pmImg').innerHTML=imgTag(p,false);
@@ -762,7 +791,7 @@
   }
   function toggleSaved(p){
     if(!p) return; var k=keyOf(p), i=saved.indexOf(k);
-    if(i>=0){ saved.splice(i,1); toast('Removed from saved'); } else { saved.push(k); toast('Saved \u2665 \u2014 find it under the heart icon'); }
+    if(i>=0){ saved.splice(i,1); toast('Removed from saved'); } else { saved.push(k); toast('Saved \u2665 \u2014 find it under the heart icon'); track('save',k); }
     persistSaved();
     var y=window.scrollY; if(curFilter==='saved') setFilter('saved',false); else { renderGrid(curFilter); paintSavedCount(); } window.scrollTo(0,y);
     if(pmCur>=0&&CATALOG[pmCur]===p) paintSave(p);
@@ -785,6 +814,7 @@
   function runSearch(scroll){
     searchQ=$('searchInput').value.trim(); $('searchBox').classList.toggle('has',!!searchQ);
     if(searchQ) setFilter('search',scroll); else setFilter('all',false);
+    clearTimeout(window.__sq); if(searchQ.length>=2) window.__sq=setTimeout(function(){ track('search',null,searchQ.toLowerCase()); },1500);
   }
   $('searchInput').addEventListener('input',function(){ clearTimeout(sTimer); sTimer=setTimeout(function(){runSearch(false)},150); });
   $('searchInput').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); clearTimeout(sTimer); runSearch(true); this.blur(); } if(e.key==='Escape'){ this.value=''; runSearch(false); } });
@@ -835,6 +865,13 @@
     }catch(err){ console.warn('Ziyaan:',err); useCatalog(fallback); }
   }
   loadProducts();
+  track('page_view');
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a'); if(!a) return;
+    if(a.id==='checkout'&&!a.classList.contains('disabled')) track('checkout',null,$('cartTotal').textContent);
+    else if(a.id==='mpesaConfirm'&&!a.classList.contains('disabled')) track('mpesa',null,$('cartTotal').textContent);
+    else if(/wa\.me\//.test(a.href)) track('whatsapp',a.id==='pmAsk'&&pmCur>=0?CATALOG[pmCur].brand+' '+CATALOG[pmCur].name:null);
+  },true);
 
   $('cartItems').addEventListener('click',function(e){
     var b=e.target.closest('button'); if(!b) return; var it=cart[b.dataset.k]; if(!it) return;
