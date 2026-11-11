@@ -87,6 +87,45 @@
   .qbtn:disabled{opacity:.4; cursor:wait;}
   .badge.low{background:#f0a35a; color:#1a1208;} .badge.out{background:var(--red); color:#fff;}
 
+  /* tabs */
+  .tabsnav{display:flex; gap:4px; margin-left:18px;}
+  .tabsnav button{background:none; border:none; border-bottom:2px solid transparent; color:var(--soft); padding:8px 12px; font-size:14px; cursor:pointer;}
+  .tabsnav button.on{color:var(--ink); border-color:var(--gold);}
+  .tabsnav button:hover{color:var(--gold);}
+
+  /* visitors */
+  .ranges{display:flex; gap:6px; flex-wrap:wrap;}
+  .ranges button{background:var(--card); border:1px solid var(--line); color:var(--ink); padding:8px 14px; border-radius:30px; font-size:13px; cursor:pointer;}
+  .ranges button.on{background:var(--gold); color:#171410; border-color:var(--gold);}
+  .kpis{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin-bottom:22px;}
+  .kpi{background:var(--card); border:1px solid var(--line); padding:14px 16px;}
+  .kpi b{display:block; font-size:28px; font-weight:500; line-height:1.15; font-variant-numeric:tabular-nums;}
+  .kpi span{font-size:12.5px; color:var(--soft);}
+  .kpi.live b::before{content:""; display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--green); margin-right:8px; vertical-align:middle; box-shadow:0 0 0 4px rgba(63,191,107,.18);}
+  .panel{background:var(--card); border:1px solid var(--line); padding:18px 18px 14px; margin-bottom:16px;}
+  .panel h3{font-family:'Jost',sans-serif; font-size:14px; font-weight:500; margin-bottom:2px;}
+  .panel .sub{font-size:12px; color:var(--soft); margin-bottom:12px;}
+  .grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px;}
+  .chart{position:relative;}
+  .chart svg{display:block; width:100%; height:220px; overflow:visible;}
+  .chart .tip{position:absolute; pointer-events:none; background:#1b1812; border:1px solid var(--line); padding:7px 10px; font-size:12px; white-space:nowrap; transform:translate(-50%,-100%); opacity:0; transition:opacity .1s; z-index:2;}
+  .chart .tip b{display:block; font-size:13px; color:var(--ink);}
+  .chart .tip span{color:var(--soft);}
+  .hbars{display:flex; flex-direction:column; gap:9px;}
+  .hb{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 10px; font-size:13px;}
+  .hb .nm{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .hb .vl{color:var(--soft); font-variant-numeric:tabular-nums;}
+  .hb .tr{grid-column:1/-1; height:8px; background:#1a1712; border-radius:4px; overflow:hidden;}
+  .hb .fl{height:100%; background:var(--gold); border-radius:0 4px 4px 0;}
+  .none{font-size:13px; color:var(--soft); padding:6px 0;}
+  details.tbl{margin-top:10px; font-size:12.5px; color:var(--soft);}
+  details.tbl summary{cursor:pointer;}
+  details.tbl table{border-collapse:collapse; margin-top:8px; width:100%;}
+  details.tbl td,details.tbl th{border-bottom:1px solid var(--line); padding:5px 8px; text-align:left; font-weight:400;}
+  details.tbl td:not(:first-child),details.tbl th:not(:first-child){text-align:right;}
+  .note{font-size:12px; color:var(--soft); margin-top:6px; line-height:1.6;}
+  @media(max-width:640px){ header.top .in{flex-wrap:wrap; gap:8px 10px; padding:10px 14px;} header.top img{height:40px;} .tabsnav{order:5; width:100%; margin:0; border-top:1px solid var(--line); padding-top:4px;} .tabsnav button{flex:1; padding:8px;} header.top .t{display:none;} header.top .btn.sm{margin-left:auto;} header.top .btn.sm+.btn.sm{margin-left:0;} .kpi b{font-size:24px;} .ranges button{padding:7px 11px;} }
+
   /* editor */
   .ov{position:fixed; inset:0; background:rgba(0,0,0,.72); z-index:50; display:flex; justify-content:flex-end;}
   .ed{width:min(720px,100%); height:100%; background:var(--bg); border-left:1px solid var(--line); display:flex; flex-direction:column;}
@@ -162,11 +201,13 @@
   <header class="top"><div class="in">
     <img src="images/logo.png" alt="">
     <span class="t">Spray Manager</span>
+    <nav class="tabsnav" aria-label="Sections"><button type="button" class="on" data-tab="pSprays">Sprays</button><button type="button" data-tab="pStats">Visitors</button></nav>
     <span class="who" id="who"></span>
     <a class="btn ghost sm" href="index.html" target="_blank" rel="noopener">View shop ↗</a>
     <button class="btn ghost sm" type="button" data-signout>Sign out</button>
   </div></header>
   <main>
+   <section id="pSprays">
     <div class="bar">
       <h2>Your Sprays</h2>
       <input type="search" id="q" placeholder="Search name or brand…" aria-label="Search">
@@ -187,6 +228,16 @@
     <div id="alerts"></div>
     <div class="stats" id="stats"></div>
     <div class="list" id="list"><p class="empty">Loading…</p></div>
+   </section>
+   <section id="pStats" class="hidden">
+    <div class="bar">
+      <h2>Visitors</h2>
+      <div class="ranges" id="ranges"><button type="button" data-d="1">Today</button><button type="button" data-d="7" class="on">7 days</button><button type="button" data-d="30">30 days</button><button type="button" data-d="90">90 days</button></div>
+      <button class="btn ghost sm" type="button" id="statsRefresh">↻ Refresh</button>
+    </div>
+    <div id="statsBody"><p class="empty">Loading…</p></div>
+    <p class="note">Counts are anonymous — no names, phone numbers or locations are recorded. A "visitor" is one phone or computer. Your own visits are not counted while you are signed in to this admin page on that device.</p>
+   </section>
   </main>
 </div>
 
@@ -504,6 +555,82 @@
   // keep stock numbers fresh if another admin changes them
   setInterval(function(){ if(!$('vApp').classList.contains('hidden')&&$('ov').classList.contains('hidden')&&!document.hidden) load(); },60000);
   document.addEventListener('visibilitychange',function(){ if(!document.hidden&&!$('vApp').classList.contains('hidden')&&$('ov').classList.contains('hidden')) load(); });
+  /* ---------- tabs ---------- */
+  var statsDays=7, statsLoaded=0;
+  document.querySelector('.tabsnav').addEventListener('click',function(e){
+    var b=e.target.closest('[data-tab]'); if(!b) return;
+    document.querySelectorAll('.tabsnav button').forEach(function(x){x.classList.toggle('on',x===b)});
+    $('pSprays').classList.toggle('hidden',b.dataset.tab!=='pSprays'); $('pStats').classList.toggle('hidden',b.dataset.tab!=='pStats');
+    if(b.dataset.tab==='pStats'&&Date.now()-statsLoaded>30000) loadStats();
+  });
+  $('ranges').addEventListener('click',function(e){
+    var b=e.target.closest('[data-d]'); if(!b) return; statsDays=+b.dataset.d;
+    $('ranges').querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)}); loadStats();
+  });
+  $('statsRefresh').addEventListener('click',function(){ loadStats(); });
+
+  /* ---------- visitor stats ---------- */
+  function n(v){return (+v||0).toLocaleString('en-KE')}
+  function pct(a,b){return b?Math.round(a*100/b)+'%':'—'}
+  function hbars(list,empty,label){
+    list=list||[]; if(!list.length) return '<div class="none">'+empty+'</div>';
+    var max=Math.max.apply(null,list.map(function(x){return x.n}));
+    return '<div class="hbars">'+list.map(function(x){ var nm=label?label(x.name):x.name; return '<div class="hb" title="'+esc(nm)+': '+n(x.n)+'"><span class="nm">'+esc(nm)+'</span><span class="vl">'+n(x.n)+'</span><div class="tr"><div class="fl" style="width:'+Math.max(2,x.n*100/max)+'%"></div></div></div>'; }).join('')+'</div>';
+  }
+  var SRC={direct:'Direct / typed link',whatsapp:'WhatsApp',instagram:'Instagram',facebook:'Facebook',tiktok:'TikTok',google:'Google'};
+  var DEV={phone:'📱 Phone',computer:'💻 Computer',tablet:'Tablet',unknown:'Unknown'};
+  function dayLabel(d,short){ var x=new Date(d+'T12:00:00'); return x.toLocaleDateString('en-GB',short?{day:'numeric',month:'short'}:{weekday:'short',day:'numeric',month:'short'}); }
+  function chart(daily,W){
+    W=Math.max(260,Math.round(W||760)); var H=220,pl=34,pb=26,pt=10,iw=W-pl-6,ih=H-pt-pb, max=Math.max(4,Math.max.apply(null,daily.map(function(d){return d.visitors})));
+    var step=Math.pow(10,Math.floor(Math.log10(max))), nice=Math.ceil(max/step)*step; if(nice/step<3) { step=step/2; } var ticks=[]; for(var t=0;t<=nice+1e-9;t+=step) ticks.push(Math.round(t));
+    var bw=iw/daily.length, w=Math.max(2,Math.min(44,bw-Math.min(6,bw*.3))), gap=bw-w, y=function(v){return pt+ih-v/nice*ih};
+    var every=Math.ceil(daily.length/Math.max(2,Math.floor(iw/64)));
+    var g=ticks.map(function(t){return '<line x1="'+pl+'" x2="'+(W-6)+'" y1="'+y(t)+'" y2="'+y(t)+'" stroke="#2a251c" stroke-width="1"/><text x="'+(pl-8)+'" y="'+(y(t)+4)+'" fill="#b9a878" font-size="11" text-anchor="end">'+t+'</text>'}).join('');
+    var bars=daily.map(function(d,i){ var x=pl+i*bw+gap/2, h=Math.max(d.visitors?2:0,ih*d.visitors/nice), r=Math.min(4,w/2,h);
+      var path=h?'M'+x+','+(pt+ih)+'V'+(pt+ih-h+r)+'Q'+x+','+(pt+ih-h)+' '+(x+r)+','+(pt+ih-h)+'H'+(x+w-r)+'Q'+(x+w)+','+(pt+ih-h)+' '+(x+w)+','+(pt+ih-h+r)+'V'+(pt+ih)+'Z':'';
+      return '<g data-i="'+i+'"><rect x="'+(pl+i*bw)+'" y="'+pt+'" width="'+bw+'" height="'+ih+'" fill="transparent"/>'+(path?'<path d="'+path+'" fill="#eab647"/>':'')+
+        ((i%every===0||i===daily.length-1)&&daily.length>1?'<text x="'+(x+w/2)+'" y="'+(H-6)+'" fill="#b9a878" font-size="11" text-anchor="middle">'+esc(dayLabel(d.day,true))+'</text>':'')+'</g>'; }).join('');
+    var rows=daily.map(function(d){return '<tr><td>'+esc(dayLabel(d.day))+'</td><td>'+n(d.visitors)+'</td><td>'+n(d.views)+'</td></tr>'}).join('');
+    return '<div class="chart" id="vchart"><svg viewBox="0 0 '+W+' '+H+'" style="height:'+H+'px" role="img" aria-label="Visitors per day">'+g+'<line x1="'+pl+'" x2="'+(W-6)+'" y1="'+(pt+ih)+'" y2="'+(pt+ih)+'" stroke="#4a412f"/>'+bars+'</svg><div class="tip" id="vtip"></div></div>'+
+      '<details class="tbl"><summary>Show as table</summary><table><tr><th>Day</th><th>Visitors</th><th>Page views</th></tr>'+rows+'</table></details>';
+  }
+  function wireChart(daily){
+    var c=$('vchart'); if(!c) return; var tip=$('vtip'), svg=c.querySelector('svg');
+    function show(e){ var g=e.target.closest('g[data-i]'); if(!g){ tip.style.opacity=0; return; } var d=daily[+g.dataset.i], r=c.getBoundingClientRect(), b=g.getBoundingClientRect();
+      tip.innerHTML='<b>'+n(d.visitors)+' visitor'+(d.visitors==1?'':'s')+'</b><span>'+esc(dayLabel(d.day))+' · '+n(d.views)+' page views</span>';
+      tip.style.left=Math.min(Math.max(b.left-r.left+b.width/2,70),r.width-70)+'px'; tip.style.top=(b.top-r.top+8)+'px'; tip.style.opacity=1; }
+    svg.addEventListener('mousemove',show); svg.addEventListener('click',show); svg.addEventListener('mouseleave',function(){tip.style.opacity=0});
+  }
+  var lastDaily=null, rzT=null;
+  window.addEventListener('resize',function(){ clearTimeout(rzT); rzT=setTimeout(function(){ var b=$('chartBox'); if(b&&lastDaily&&b.clientWidth!==b._w){ b._w=b.clientWidth; b.innerHTML=chart(lastDaily,b.clientWidth); wireChart(lastDaily); } },150); });
+  async function loadStats(){
+    var body=$('statsBody'); if(!statsLoaded) body.innerHTML='<p class="empty">Loading…</p>';
+    var r=await db.rpc('site_stats',{p_days:statsDays});
+    if(r.error){ body.innerHTML='<p class="empty">'+(/site_stats|function|schema cache|404/i.test(r.error.message+r.error.status)?'The visitor tracker isn\u2019t set up in the database yet. Run <b>analytics-setup.sql</b> in Supabase \u2192 SQL Editor.':esc(friendly(r.error)))+'</p>'; return; }
+    statsLoaded=Date.now(); var s=r.data||{};
+    var range=statsDays===1?'today':'in the last '+statsDays+' days';
+    var html='<div class="kpis">'+
+      '<div class="kpi"><b>'+n(s.visitors)+'</b><span>visitors '+range+'</span></div>'+
+      '<div class="kpi live"><b>'+n(s.live_now)+'</b><span>on the shop now (last 30 min)</span></div>'+
+      '<div class="kpi"><b>'+n(s.views)+'</b><span>page views</span></div>'+
+      '<div class="kpi"><b>'+n(s.story_opens)+'</b><span>spray stories opened</span></div>'+
+      '<div class="kpi"><b>'+n(s.add_to_cart)+'</b><span>added to cart</span></div>'+
+      '<div class="kpi"><b>'+n(s.checkouts)+'</b><span>orders sent to WhatsApp ('+pct(s.buyers,s.visitors)+' of visitors)</span></div>'+
+      '<div class="kpi"><b>'+n(s.whatsapp)+'</b><span>WhatsApp chats started</span></div>'+
+    '</div>';
+    if(statsDays>1) html+='<div class="panel"><h3>Visitors per day</h3><div class="sub">Each phone or computer counted once per day · tap a bar for details</div><div id="chartBox">'+chart(s.daily||[],$('statsBody').clientWidth-38)+'</div></div>';
+    lastDaily=s.daily||[];
+    html+='<div class="grid2">'+
+      '<div class="panel"><h3>Most viewed sprays</h3><div class="sub">Story opened</div>'+hbars(s.top_viewed,'No spray stories opened yet.')+'</div>'+
+      '<div class="panel"><h3>Most added to cart</h3><div class="sub">Times added</div>'+hbars(s.top_cart,'Nothing added to cart yet.')+'</div>'+
+      '<div class="panel"><h3>Where visitors come from</h3><div class="sub">Visitors per source</div>'+hbars(s.sources,'No visits yet.',function(k){return SRC[k]||k})+'</div>'+
+      '<div class="panel"><h3>Phone or computer</h3><div class="sub">Visitors per device</div>'+hbars(s.devices,'No visits yet.',function(k){return DEV[k]||k})+'</div>'+
+      '<div class="panel"><h3>What people searched for</h3><div class="sub">Searches in the shop</div>'+hbars(s.searches,'No searches yet.')+'</div>'+
+    '</div>';
+    body.innerHTML=html; wireChart(s.daily||[]);
+  }
+  setInterval(function(){ if(!$('pStats').classList.contains('hidden')&&!$('vApp').classList.contains('hidden')&&!document.hidden) loadStats(); },60000);
+
   db.auth.onAuthStateChange(function(ev){ if(ev==='SIGNED_OUT') view('vLogin'); });
   boot().catch(function(err){ view('vLogin'); showErr('loginErr',friendly(err)); });
 })();
