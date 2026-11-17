@@ -190,8 +190,8 @@
   <img src="images/logo.png" alt="Ziyaan Elite">
   <h1>Admin Sign In</h1>
   <p class="sub">Manage the sprays on your shop</p>
-  <label for="email">Email</label>
-  <input type="email" id="email" autocomplete="username" required>
+  <label for="email">Username</label>
+  <input type="text" id="email" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
   <label for="pass">Password</label>
   <input type="password" id="pass" autocomplete="current-password" required>
   <button class="btn" id="loginBtn" type="submit">SIGN IN</button>
@@ -348,7 +348,7 @@
   function showErr(id,msg){var e=$(id); e.textContent=msg||''; e.classList.toggle('hidden',!msg)}
   function friendly(err){
     var m=(err&&(err.message||err.error_description))||String(err||'Something went wrong');
-    if(/Invalid login credentials/i.test(m)) return 'Wrong email or password.';
+    if(/Invalid login credentials/i.test(m)) return 'Wrong username or password.';
     if(/row-level security|violates|permission denied|not authorized|Unauthorized/i.test(m)) return 'This account is not allowed to make changes. Make sure it has been added as an admin.';
     if(/Failed to fetch|NetworkError|network/i.test(m)) return 'Could not reach the database. Check your internet connection.';
     if(/Bucket not found/i.test(m)) return 'Photo storage is not set up. Run supabase-setup.sql in Supabase first.';
@@ -360,6 +360,11 @@
   if(!window.ZiyaanDB){ view('vSetup'); showErr('setupErr','The file db.js is missing. Upload it next to admin.html.'); return; }
   var db=window.ZiyaanDB.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey);
   var me=null, ITEMS=[];
+  // Admins sign in with a username. Behind the scenes each username is an account
+  // named <username>@admin.ziyaanelite.co.ke in Supabase. Typing a full email still works.
+  var ADMIN_DOMAIN='admin.ziyaanelite.co.ke';
+  function loginEmail(u){ u=String(u||'').trim().toLowerCase(); return u.indexOf('@')>=0?u:u+'@'+ADMIN_DOMAIN; }
+  function displayName(email){ email=String(email||''); var at=email.lastIndexOf('@'); return at>0&&email.slice(at+1)===ADMIN_DOMAIN?email.slice(0,at):email; }
 
   /* ---------- auth ---------- */
   async function boot(){
@@ -368,15 +373,17 @@
     me=user;
     var r=await db.from('admins').select('user_id').eq('user_id',user.id).maybeSingle();
     if(r.error||!r.data){
-      $('noAdminWho').textContent='Signed in as '+user.email;
+      $('noAdminWho').textContent='Signed in as '+displayName(user.email);
       $('noAdminSql').textContent="insert into public.admins (user_id)\n  select id from auth.users where email = '"+String(user.email).replace(/'/g,"''")+"'\non conflict do nothing;";
       view('vNoAdmin'); return;
     }
-    $('who').textContent=user.email; view('vApp'); load();
+    $('who').textContent=displayName(user.email); view('vApp'); load();
   }
   $('loginForm').addEventListener('submit',async function(e){
     e.preventDefault(); showErr('loginErr',''); var b=$('loginBtn'); b.disabled=true; b.textContent='SIGNING IN…';
-    var r=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});
+    var u=$('email').value.trim();
+    if(u.indexOf('@')<0&&!/^[a-z0-9._-]{2,40}$/i.test(u)){ b.disabled=false; b.textContent='SIGN IN'; showErr('loginErr','Usernames use letters, numbers, dots, dashes or underscores only.'); return; }
+    var r=await db.auth.signInWithPassword({email:loginEmail(u),password:$('pass').value});
     b.disabled=false; b.textContent='SIGN IN';
     if(r.error){ showErr('loginErr',friendly(r.error)); return; }
     $('pass').value=''; boot();
