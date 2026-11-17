@@ -1,0 +1,27 @@
+# Copies Google Search Console numbers into Supabase for the admin page's "Google Search" tab.
+# Runs every morning (Nairobi time) and when started by hand from the Actions tab.
+name: Google Search stats
+
+on:
+  schedule:
+    - cron: "41 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Google sign-in library
+        run: pip install --quiet google-auth requests
+      - name: Copy Search Console numbers to Supabase
+        env:
+          GSC_SERVICE_ACCOUNT: ${{ secrets.GSC_SERVICE_ACCOUNT }}
+          GSC_SYNC_TOKEN: ${{ secrets.GSC_SYNC_TOKEN }}
+        run: python3 build/gsc_sync.py
