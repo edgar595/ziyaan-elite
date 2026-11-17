@@ -12,10 +12,10 @@ window.ZIYAAN_CONFIG = {
 
   /* ---- Contact section (leave '' to hide a card) ---- */
   phone: '0720 081 710',   // shown on the "Call us" card
-  email: '',               // e.g. 'orders@ziyaanelite.co.ke'
+  email: 'ziyaanelite@gmail.com',
   location: '',            // e.g. 'Moi Avenue, Nairobi CBD'
   mapsUrl: '',             // Google Maps link to your shop (optional)
   hours: '',               // e.g. 'Mon–Sat 9am–8pm'
-  instagram: '',           // e.g. 'ziyaanelite'
-  tiktok: ''               // e.g. 'ziyaanelite'
+  instagram: 'originaldesignerperfumes',
+  tiktok: 'originaldesignerperfumes'
 };
