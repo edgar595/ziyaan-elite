@@ -1,0 +1,48 @@
+# Builds the Ziyaan Élite website (spray pages, category pages, sitemap)
+# from the live Supabase database and publishes it on GitHub Pages.
+# Runs on every change, every 3 hours, and when started by hand from the Actions tab.
+name: Build & publish site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install image tool (for the share picture)
+        run: pip install --quiet pillow || echo "Pillow not installed - using a product photo as the share picture"
+      - id: pages
+        uses: actions/configure-pages@v5
+      - name: Build pages from the database
+        run: python3 build/build_site.py --out _site --site-url "${{ steps.pages.outputs.base_url }}/"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
